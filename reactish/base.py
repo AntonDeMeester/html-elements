@@ -1,5 +1,6 @@
 from abc import ABC, ABCMeta
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type, TypedDict
+from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type,
+                    TypedDict)
 
 from typing_extensions import dataclass_transform
 
@@ -62,7 +63,7 @@ def HtmlAttribute(
 
 
 @dataclass_transform(
-    field_specifiers=(HtmlAttributeInfo,),
+    field_specifiers=(HtmlAttribute, HtmlAttributeInfo),
     kw_only_default=True,
     eq_default=False,
     order_default=False,
