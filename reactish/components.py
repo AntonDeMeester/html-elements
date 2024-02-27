@@ -655,9 +655,7 @@ class TextArea(BaseComponent):
             new_indent_amount = indent + indent_step
             for c in self.components:
                 if isinstance(c, BaseComponent):
-                    html_string += c.to_html(
-                        indent=new_indent_amount, indent_step=indent_step, format=format
-                    )
+                    html_string += c.to_html(indent=new_indent_amount, indent_step=indent_step, format=format)
                 else:
                     new_indent = ""
                     html_string += f"{new_indent}{c}{endline}"

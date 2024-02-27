@@ -16,12 +16,7 @@ class Script(BaseComponent):
     extra_attrs = ["src", "defer", "crossorigin"]
 
     def __init__(
-        self,
-        *args: Any,
-        src: str | None = None,
-        defer: bool | None = None,
-        crossorigin: str | None = None,
-        **kwargs: Any
+        self, *args: Any, src: str | None = None, defer: bool | None = None, crossorigin: str | None = None, **kwargs: Any
     ):
         super().__init__(*args, **kwargs)
         self.src = src
@@ -33,9 +28,7 @@ class Link(BaseComponent):
     html_tag = "link"
     extra_attrs = ["rel", "href"]
 
-    def __init__(
-        self, *args: Any, rel: str | None = None, href: str | None = None, **kwargs: Any
-    ):
+    def __init__(self, *args: Any, rel: str | None = None, href: str | None = None, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.rel = rel
         self.href = href
@@ -46,12 +39,7 @@ class Meta(BaseComponent):
     extra_attrs = ["charset", "name", "content"]
 
     def __init__(
-        self,
-        *args: Any,
-        charset: str | None = None,
-        name: str | None = None,
-        content: str | None = None,
-        **kwargs: Any
+        self, *args: Any, charset: str | None = None, name: str | None = None, content: str | None = None, **kwargs: Any
     ):
         super().__init__(*args, **kwargs)
         self.charset = charset

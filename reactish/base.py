@@ -68,9 +68,7 @@ class BaseComponent(ABC):
             new_indent_amount = indent + indent_step
             for c in self.components:
                 if isinstance(c, BaseComponent):
-                    html_string += c.to_html(
-                        indent=new_indent_amount, indent_step=indent_step, format=format
-                    )
+                    html_string += c.to_html(indent=new_indent_amount, indent_step=indent_step, format=format)
                 else:
                     new_indent = " " * new_indent_amount
                     html_string += f"{new_indent}{c}{endline}"
@@ -83,9 +81,7 @@ class BaseComponent(ABC):
     def attrs(self) -> dict[str, str]:
         attrs = {}
         if self.style is not None:
-            attrs["style"] = "; ".join(
-                f"{key}: {value}" for key, value in self.style.items()
-            )
+            attrs["style"] = "; ".join(f"{key}: {value}" for key, value in self.style.items())
         if self.aria is not None:
             for key, value in self.aria.items():
                 attrs[f"aria-{key}"] = value
