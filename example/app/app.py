@@ -39,14 +39,10 @@ def get_invoices_request(
 ) -> HTMLResponse:
     if any(not s for s in status):
         status = []
-    invoices = get_all_invoices(
-        status=status, invoiceNumber=invoiceNumber, entity=entity
-    )
+    invoices = get_all_invoices(status=status, invoiceNumber=invoiceNumber, entity=entity)
     total_invoices = len(invoices)
     max_pages = math.ceil(total_invoices / INVOICES_PER_PAGE)
-    relevant_invoices = get_relevant_invoices(
-        invoices, page, INVOICES_PER_PAGE, sort_by=sort_by, sort_order=sort_order
-    )
+    relevant_invoices = get_relevant_invoices(invoices, page, INVOICES_PER_PAGE, sort_by=sort_by, sort_order=sort_order)
     if is_htmx:
         html_page = invoices_table.get_invoice_table(
             invoices=relevant_invoices,
@@ -85,9 +81,7 @@ def get_details_invoices_request(id: str) -> HTMLResponse:
     inv = get_invoice(id)
     if inv is None:
         return Response("Not Found", status_code=404)
-    return HTMLResponse(
-        invoice_details.get_invoice_detail_page(inv).to_html(), status_code=200
-    )
+    return HTMLResponse(invoice_details.get_invoice_detail_page(inv).to_html(), status_code=200)
 
 
 @app.get("/invoices/{id}/tabs/{tab}")
@@ -99,7 +93,8 @@ def get_details_invoices_request(
     if inv is None:
         return Response("Not Found", status_code=404)
     return HTMLResponse(
-        invoice_details.get_line_item_section(invoice=inv, selected=tab).to_html(), status_code=200
+        invoice_details.get_line_item_section(invoice=inv, selected=tab).to_html(),
+        status_code=200,
     )
 
 
@@ -123,19 +118,11 @@ def get_all_invoices(
 ) -> list[dict]:
     filtered_invoices = db.invoices
     if status:
-        filtered_invoices = [
-            inv for inv in filtered_invoices if inv["status"] in status
-        ]
+        filtered_invoices = [inv for inv in filtered_invoices if inv["status"] in status]
     if entity:
-        filtered_invoices = [
-            inv for inv in filtered_invoices if entity == inv["entity"]
-        ]
+        filtered_invoices = [inv for inv in filtered_invoices if entity == inv["entity"]]
     if invoiceNumber:
-        filtered_invoices = [
-            inv
-            for inv in filtered_invoices
-            if invoiceNumber.lower() in inv["invoiceNumber"].lower()
-        ]
+        filtered_invoices = [inv for inv in filtered_invoices if invoiceNumber.lower() in inv["invoiceNumber"].lower()]
     if remove:
         filtered_invoices = [inv for inv in filtered_invoices if remove != inv["id"]]
     return filtered_invoices
@@ -150,7 +137,5 @@ def get_relevant_invoices(
 ) -> list[dict]:
     if sort_by:
         is_descending = sort_order == "desc"
-        invoices = sorted(
-            invoices, key=lambda x: x.get(sort_by, None), reverse=is_descending
-        )
+        invoices = sorted(invoices, key=lambda x: x.get(sort_by, None), reverse=is_descending)
     return invoices[(page - 1) * page_size : page * page_size]

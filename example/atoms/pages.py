@@ -18,11 +18,7 @@ def BasePage(*content: BaseComponent, selected: str | None = None) -> BaseCompon
     )
     layout = c.Div(
         c.Nav(menu, class_name="sidebar"),
-        c.Main(
-            *content,
-            class_name="centerpiece",
-            style={"overflow": "hidden", "width": "calc(100% - 200px)"}
-        ),
+        c.Main(*content, class_name="centerpiece", style={"overflow": "hidden", "width": "calc(100% - 200px)"}),
         class_name="wrapper",
     )
 
@@ -38,9 +34,7 @@ def BasePage(*content: BaseComponent, selected: str | None = None) -> BaseCompon
                 href="/static/css/base.css",
                 rel="stylesheet",
             ),
-            Script(
-                src="https://kit.fontawesome.com/605ae70237.js", crossorigin="anonymous"
-            ),
+            Script(src="https://kit.fontawesome.com/605ae70237.js", crossorigin="anonymous"),
             Script(src="/static/js/htmx.js", crossorigin="anonymous"),
         ),
         Body(

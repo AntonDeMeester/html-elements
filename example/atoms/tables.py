@@ -1,6 +1,5 @@
 import sys
 from typing import Any, Callable, Literal, TypedDict, TypeVar
-from urllib.parse import parse_qs, urlencode, urlparse
 
 from example.atoms import basics
 from fastapi.datastructures import URL
@@ -45,21 +44,14 @@ def BasicTable(
     for col in columns:
         hx = {}
         header_classes = ""
-        col_text = (
-            c.Span(col["label"]) if isinstance(col["label"], str) else col["label"]
-        )
-        style ={
-                    "white-space": "nowrap"
-                }
+        col_text = c.Span(col["label"]) if isinstance(col["label"], str) else col["label"]
+        style = {"white-space": "nowrap"}
         if width := col.get("width", None):
             style["min-width"] = width
-            style["max-width"] = width
         if sortable and "attr" in col:
             if not current_url:
                 raise ValueError("Need a current URL to enable sorting")
-            new_url = current_url.include_query_params(
-                sort_by=col["attr"], sort_order="asc"
-            )
+            new_url = current_url.include_query_params(sort_by=col["attr"], sort_order="asc")
             if active_sort and active_sort["field"] == col["attr"]:
                 if active_sort["direction"] == "asc":
                     new_url = new_url.include_query_params(sort_order="desc")
@@ -75,9 +67,7 @@ def BasicTable(
                 col_text = c.Span(
                     c.Span(col["label"]),
                     basics.Icon(
-                        "arrow-up"
-                        if active_sort["direction"] == "asc"
-                        else "arrow-down",
+                        ("arrow-up" if active_sort["direction"] == "asc" else "arrow-down"),
                         "solid is-small has-text-grey",
                     ),
                     class_name="icon-text is-small",

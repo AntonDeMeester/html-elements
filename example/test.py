@@ -61,9 +61,7 @@ menu = c.Aside(
     class_name="menu",
 )
 
-layout = c.Div(
-    c.Nav(menu, class_name="sidebar"), c.Main(content, class_name="centerpiece")
-)
+layout = c.Div(c.Nav(menu, class_name="sidebar"), c.Main(content, class_name="centerpiece"))
 
 html = Page(
     Head(
@@ -73,9 +71,7 @@ html = Page(
             rel="stylesheet",
             href="file:///Users/anton/Documents/personal/code/html/example/static/css/bulma.min.css",
         ),
-        Script(
-            src="https://kit.fontawesome.com/605ae70237.js", crossorigin="anonymous"
-        ),
+        Script(src="https://kit.fontawesome.com/605ae70237.js", crossorigin="anonymous"),
     ),
     Body(
         Link(

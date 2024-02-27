@@ -151,15 +151,11 @@ table = tables.BasicTable(
         },
         {
             "label": "Submitter",
-            "value_generator": lambda item: ", ".join(
-                item["submitter"] if item["submitter"] is not None else []
-            ),
+            "value_generator": lambda item: ", ".join(item["submitter"] if item["submitter"] is not None else []),
         },
         {
             "label": "Current Approver",
-            "value_generator": lambda item: ", ".join(
-                item["approver"] if item["approver"] is not None else []
-            ),
+            "value_generator": lambda item: ", ".join(item["approver"] if item["approver"] is not None else []),
         },
         {"label": "Status", "attr": "status"},
     ],

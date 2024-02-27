@@ -5,15 +5,11 @@ from reactish import components as c
 
 
 def Icon(icon: str, fa_group: str, **kwargs) -> c.BaseComponent:
-    return c.Span(
-        c.I(class_name=f"fa-{fa_group} fa-{icon}"), class_name="icon", **kwargs
-    )
+    return c.Span(c.I(class_name=f"fa-{fa_group} fa-{icon}"), class_name="icon", **kwargs)
 
 
 def Tooltip(component: c.BaseComponent, tooltip_text: str) -> c.BaseComponent:
-    return c.Div(
-        component, c.Span(tooltip_text, class_name="tooltiptext"), class_name="tooltip"
-    )
+    return c.Div(component, c.Span(tooltip_text, class_name="tooltiptext"), class_name="tooltip")
 
 
 def Tag(text: str, color: str = "") -> c.BaseComponent:

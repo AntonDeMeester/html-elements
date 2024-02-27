@@ -23,19 +23,26 @@ def _get_top_bar(invoice: dict) -> c.BaseComponent:
         c.Div(
             c.Div(
                 c.Button(
-                    "Save", class_name=["button", "is-primary", "is-light", "is-small"], hx_patch=f"/invoice/{invoice['id']}"
+                    "Save",
+                    class_name=["button", "is-primary", "is-light", "is-small"],
+                    hx_patch=f"/invoice/{invoice['id']}",
                 ),
                 class_name=["level-item"],
             ),
             c.Div(
                 c.Button(
-                    "Reject",type="button",
+                    "Reject",
+                    type="button",
                     class_name=["button", "is-primary", "is-warning", "is-small"],
                 ),
                 class_name=["level-item"],
             ),
             c.Div(
-                c.Button("Submit", type="button", class_name=["button", "is-primary", "is-small"]),
+                c.Button(
+                    "Submit",
+                    type="button",
+                    class_name=["button", "is-primary", "is-small"],
+                ),
                 class_name=["level-item"],
             ),
             class_name=["level-right"],
@@ -45,10 +52,13 @@ def _get_top_bar(invoice: dict) -> c.BaseComponent:
 
 
 def _get_invoice_details(invoice: dict) -> c.BaseComponent:
-    origin = "Origin: anton.demeester@yokoy.ai | Company: Anton Company" # TODO
+    origin = "Origin: anton.demeester@yokoy.ai | Company: Anton Company"  # TODO
     return c.Div(
         flexbox.Columns(
-            c.Div(c.H(f"Invoice Overview", level=2), basics.Tag(invoice['status'], color="green")),
+            c.Div(
+                c.H("Invoice Overview", level=2),
+                basics.Tag(invoice["status"], color="green"),
+            ),
             basics.Tooltip(c.P(origin), tooltip_text=origin),
         ),
         forms.FormField(
@@ -65,9 +75,7 @@ def _get_invoice_details(invoice: dict) -> c.BaseComponent:
         ),
         forms.FormSelect(
             options=[
-                {"label": s["name"], "value": s["id"]}
-                for s in db.purchase_orders
-                if s["supplierId"] == invoice["supplierId"]
+                {"label": s["name"], "value": s["id"]} for s in db.purchase_orders if s["supplierId"] == invoice["supplierId"]
             ],
             label="Purchase Order",
             selected="1",
@@ -111,7 +119,7 @@ def _get_invoice_details_wide(invoice: dict) -> c.BaseComponent:
         c.Div(
             c.Object(
                 c.P("Could not display PDF"),
-                data="/static/pdf/test.pdf", # TODO from invoice
+                data="/static/pdf/test.pdf",  # TODO from invoice
                 type="application/pdf",
                 style={"width": "100%", "height": "100%"},
             ),
@@ -134,7 +142,7 @@ def _get_invoice_details_wide(invoice: dict) -> c.BaseComponent:
 
 def _get_line_item_table(invoice: dict) -> c.BaseComponent:
     return tables.BasicTable(
-        invoice['lineItems'],
+        invoice["lineItems"],
         [
             {
                 "label": c.Input(type="checkbox"),
@@ -146,7 +154,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     type="text",
                     value=item["description"],
                     name=f"lineItems.{i}.description",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "200px",
             },
@@ -156,7 +164,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     [{"label": c["name"], "value": c["id"]} for c in db.categories],
                     selected=[item.get("categoryId", None)],
                     name=f"lineItems.{i}.categoryId",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "200px",
             },
@@ -166,7 +174,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     [{"label": c["name"], "value": c["id"]} for c in db.cost_objects],
                     selected=[item.get("costObjectId", None)],
                     name=f"lineItems.{i}.costObjectId",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "200px",
             },
@@ -176,7 +184,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     type="number",
                     value=item["quantity"],
                     name=f"lineItems.{i}.quantity",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "100px",
             },
@@ -186,7 +194,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     [{"label": c["name"], "value": c["id"]} for c in db.tax_rates],
                     selected=[item.get("taxRateId", None)],
                     name=f"lineItems.{i}.taxRateId",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "200px",
             },
@@ -196,7 +204,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     type="number",
                     value=item["net"],
                     name=f"lineItems.{i}.net",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "100px",
             },
@@ -206,7 +214,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
                     type="number",
                     value=item["gross"],
                     name=f"lineItems.{i}.gross",
-                    style={"border": "none", "box-shadow": "none"}
+                    style={"border": "none", "box-shadow": "none"},
                 ),
                 "width": "100px",
             },
@@ -223,7 +231,7 @@ def _get_line_item_table(invoice: dict) -> c.BaseComponent:
 
 def _get_line_item_tab(invoice: dict) -> c.BaseComponent:
     return c.Div(
-        c.Div( # TODO from invoice
+        c.Div(  # TODO from invoice
             basics.Notification(
                 c.Span(
                     c.Strong("Warning 64.85 CHF"),
@@ -248,7 +256,11 @@ def _get_line_item_tab(invoice: dict) -> c.BaseComponent:
             ),
             # class_name=["row", "is-narrow"]
         ),
-        c.Div(_get_line_item_table(invoice=invoice), class_name=["row"], style={"overflow": "auto"}),
+        c.Div(
+            _get_line_item_table(invoice=invoice),
+            class_name=["row"],
+            style={"overflow": "auto"},
+        ),
         style={"display": "flex", "flex-flow": "column", "height": "100%"},
     )
 
@@ -297,7 +309,7 @@ def get_line_item_section(invoice: dict, selected: str = "") -> c.BaseComponent:
         c.Div(
             _get_tab_data(invoice=invoice, selected=selected),
             id="invoiceTabData",
-            style={"height": "calc(100% - 30px - 1.5rem)"}
+            style={"height": "calc(100% - 30px - 1.5rem)"},
             # class_name=["rows", "row"],
         ),
         id="line-item-section",

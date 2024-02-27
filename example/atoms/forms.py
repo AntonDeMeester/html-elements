@@ -2,7 +2,6 @@ from typing import Any, TypedDict
 
 from reactish import components as c
 from reactish.base import Component
-from reactish.head import Script
 
 
 def FormField(
@@ -175,9 +174,7 @@ def ComplexForm(*fields: Component) -> Component:
     )
 
 
-def CombinedFormField(
-    *fields: c.BaseComponent, label: str | None = None
-) -> c.BaseComponent:
+def CombinedFormField(*fields: c.BaseComponent, label: str | None = None) -> c.BaseComponent:
     elements = []
     if label:
         elements.append(c.Label(label, class_name="label"))

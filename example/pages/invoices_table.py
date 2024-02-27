@@ -1,5 +1,4 @@
 from typing import Literal
-from urllib.parse import urlparse
 
 from example.atoms import basics, flexbox, forms, pages, tables
 from fastapi.datastructures import URL
@@ -29,11 +28,9 @@ def get_invoice_table(
         [
             {
                 "label": "Warning",
-                "value_generator": lambda item, _: basics.Tooltip(
-                    basics.Icon("bell", "solid"), "This is a warning"
-                )
-                if item["warning"]
-                else "",
+                "value_generator": lambda item, _: (
+                    basics.Tooltip(basics.Icon("bell", "solid"), "This is a warning") if item["warning"] else ""
+                ),
             },
             {"label": "Supplier", "attr": "supplier"},
             {"label": "Supplier ID", "attr": "supplierId"},
@@ -55,15 +52,11 @@ def get_invoice_table(
             },
             {
                 "label": "Submitter",
-                "value_generator": lambda item, _: ", ".join(
-                    item["submitter"] if item["submitter"] is not None else []
-                ),
+                "value_generator": lambda item, _: ", ".join(item["submitter"] if item["submitter"] is not None else []),
             },
             {
                 "label": "Current Approver",
-                "value_generator": lambda item, _: ", ".join(
-                    item["approver"] if item["approver"] is not None else []
-                ),
+                "value_generator": lambda item, _: ", ".join(item["approver"] if item["approver"] is not None else []),
             },
             {
                 "label": "Status",
@@ -82,9 +75,7 @@ def get_invoice_table(
         on_row_click=lambda item, _: f"window.location = '{url.path}/{item['id']}'",
         sortable=True,
         current_url=url,
-        active_sort={"direction": sort_order or "asc", "field": sort_by}
-        if sort_by
-        else None,
+        active_sort=({"direction": sort_order or "asc", "field": sort_by} if sort_by else None),
     )
 
     return c.Div(
@@ -113,10 +104,7 @@ def get_invoice_filters(
             ),
             forms.FormSelect(
                 label="Legal Entity",
-                options=[
-                    {"label": ent["name"], "value": ent["id"]}
-                    for ent in (entities or [])
-                ],
+                options=[{"label": ent["name"], "value": ent["id"]} for ent in (entities or [])],
                 name="entity",
                 hx_get=url.path,
                 selected=selected.get("entity", []),
@@ -148,9 +136,7 @@ def get_invoice_table_page(
     page = pages.BasePage(
         flexbox.Rows(
             c.H("Invoices", level=1, class_name="title is-1"),
-            get_invoice_filters(
-                statuses=statuses, entities=entities, selected=selected, url=url
-            ),
+            get_invoice_filters(statuses=statuses, entities=entities, selected=selected, url=url),
             get_invoice_table(*args, url=url, **kwargs),
             hx_target="#invoice-table-container",
         ),
