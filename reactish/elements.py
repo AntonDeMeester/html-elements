@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Any, Literal, Union
 
-from .fancy import BaseHtmlComponent, HtmlAttribute, HtmlMetaClass
+from .base import BaseHtmlComponent, HtmlAttribute, HtmlMetaClass
 
 TrueFalse = Literal["true", "false"]
 TrueFalseEmpty = Union[Literal[""], TrueFalse]
