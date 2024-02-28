@@ -1,6 +1,5 @@
 from abc import ABC, ABCMeta
-from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type,
-                    TypedDict)
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type, TypedDict
 
 from typing_extensions import dataclass_transform
 
@@ -31,6 +30,24 @@ class HtmlAttributeInfo:
         self.default_factory = default_factory
         self.kw_only = kw_only
 
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        fields = (
+            "html_attribute",
+            "transformer",
+            "multi_attribute",
+            "is_attribute",
+            "init",
+            "default",
+            "default_factory",
+            "kw_only",
+        )
+        for f in fields:
+            if getattr(self, f) != getattr(other, f):
+                return False
+        return True
+
 
 def HtmlAttribute(
     *,
@@ -49,7 +66,9 @@ def HtmlAttribute(
     Creates a new HTML Attribute to include in the output HTML values
     """
     if default is not Undefined and default_factory is not None:
-        raise ValueError("Cannot set both default and default factory on an HTML Attribute")
+        raise ValueError(
+            "Cannot set both default and default factory on an HTML Attribute"
+        )
     return HtmlAttributeInfo(
         html_attribute=html_attribute,
         transformer=transformer,
@@ -136,7 +155,9 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
                 if field in kwargs:
                     continue
                 if args_index >= len(args):
-                    raise TypeError("Too many arguments combined with keyword arguments")
+                    raise TypeError(
+                        "Too many arguments combined with keyword arguments"
+                    )
                 kwargs[field] = args[args_index]
                 args_index += 1
 
@@ -151,7 +172,9 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
         for field, value in kwargs.items():
             setattr(self, field, value)
 
-    def to_html(self, indent: int = 0, indent_step: int = 2, format: bool = True) -> str:
+    def to_html(
+        self, indent: int = 0, indent_step: int = 2, format: bool = True
+    ) -> str:
         # https://github.com/justpy-org/justpy/blob/master/justpy/htmlcomponents.py#L459C5-L474C17
         block_indent = " " * indent if format else ""
         endline = "\n" if format else ""
@@ -171,7 +194,9 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
             new_indent_amount = indent + indent_step if format else 0
             for c in components:
                 if isinstance(c, BaseHtmlComponent):
-                    html_string += c.to_html(indent=new_indent_amount, indent_step=indent_step, format=format)
+                    html_string += c.to_html(
+                        indent=new_indent_amount, indent_step=indent_step, format=format
+                    )
                 else:
                     new_indent = " " * new_indent_amount
                     html_string += f"{new_indent}{c}{endline}"
@@ -217,7 +242,8 @@ def format_attribute(key: str, value: Any, attribute: HtmlAttributeInfo) -> str:
     if attribute.multi_attribute:
         # For an aria dict, treat each value as
         formatted = [
-            format_attribute(f"{html_attribute}-{sub_key}", sub_value, attribute) for sub_key, sub_value in value.items()
+            format_attribute(f"{html_attribute}-{sub_key}", sub_value, attribute)
+            for sub_key, sub_value in value.items()
         ]
         # Don't add empty attributes
         return " ".join(i for i in formatted if i)
