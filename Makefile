@@ -1,0 +1,3 @@
+format:
+	black .
+	ruff . --fix
