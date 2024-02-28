@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type, TypedD
 from typing_extensions import dataclass_transform
 
 Undefined = object()
+HtmlAttributeType = Literal["attribute", "child"]
 
 
 class HtmlAttributeInfo:
@@ -14,7 +15,7 @@ class HtmlAttributeInfo:
         transformer: Callable[[Any], str] | None = None,
         # For aria / dicts which needs their own attributes but are grouped together. Needs to be a dict
         multi_attribute: bool = False,
-        is_attribute: bool = True,
+        attribute_type: HtmlAttributeType = "attribute",
         # Field specifiers https://typing.readthedocs.io/en/latest/spec/dataclasses.html#field-specifiers
         init: bool = True,
         default: Any = Undefined,
@@ -24,7 +25,7 @@ class HtmlAttributeInfo:
         self.html_attribute = html_attribute
         self.transformer = transformer
         self.multi_attribute = multi_attribute
-        self.is_attribute = is_attribute
+        self.attribute_type = attribute_type
         self.init = init
         self.default = default
         self.default_factory = default_factory
@@ -37,7 +38,7 @@ class HtmlAttributeInfo:
             "html_attribute",
             "transformer",
             "multi_attribute",
-            "is_attribute",
+            "attribute_type",
             "init",
             "default",
             "default_factory",
@@ -48,6 +49,9 @@ class HtmlAttributeInfo:
                 return False
         return True
 
+    def has_default(self) -> bool:
+        return self.default is not Undefined or self.default_factory is not None
+
 
 def HtmlAttribute(
     *,
@@ -55,7 +59,7 @@ def HtmlAttribute(
     transformer: Callable[[Any], str] | None = None,
     # For aria / dicts which needs their own attributes but are grouped together. Needs to be a dict
     multi_attribute: bool = False,
-    is_attribute: bool = True,
+    attribute_type: HtmlAttributeType = "attribute",
     # Field specifiers https://typing.readthedocs.io/en/latest/spec/dataclasses.html#field-specifiers
     init: bool = True,
     default: Any = Undefined,
@@ -73,11 +77,11 @@ def HtmlAttribute(
         html_attribute=html_attribute,
         transformer=transformer,
         multi_attribute=multi_attribute,
+        attribute_type=attribute_type,
         init=init,
         default=default,
         default_factory=default_factory,
         kw_only=kw_only,
-        is_attribute=is_attribute,
     )
 
 
@@ -144,23 +148,39 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
         cls.__html_subclasses__.append(cls)
 
     def __init__(self, *args: Any, **kwargs: Any):
-        args_index = 0
-        if args:
-            # Set correct args
-            for field, attribute in self.__html_attributes__.items():
-                # Skip Keyword only values
-                if attribute.kw_only is True:
-                    continue
-                # Skip if the field is present with a keyword
-                if field in kwargs:
-                    continue
-                if args_index >= len(args):
-                    raise TypeError(
-                        "Too many arguments combined with keyword arguments"
-                    )
-                kwargs[field] = args[args_index]
-                args_index += 1
+        # yes, this is basically reimplementing dataclasses __init__ but dataclass_transform doesn't work well if it has @dataclass
+        non_kw_attributes = [
+            k for k, v in self.__html_attributes__.items() if v.kw_only is False
+        ]
+        non_kw_attributes_without_default = [
+            k
+            for k, v in self.__html_attributes__.items()
+            if v.kw_only is False and not v.has_default()
+        ]
+        i = -1
+        for i, value in enumerate(args):
+            try:
+                field = non_kw_attributes[i]
+            except IndexError:
+                min_args = len(non_kw_attributes_without_default)
+                max_args = len(non_kw_attributes)
+                raise TypeError(
+                    f"{self.__class__.__name__}() takes {min_args} to {max_args} arguments but {len(args)} were given"
+                )
+            if field in kwargs:
+                raise TypeError(f"Got multiple values for argument '{field}'")
+            kwargs[field] = value
 
+        not_provided_args = [
+            v for v in non_kw_attributes_without_default if v not in kwargs
+        ]
+        if (missing := len(not_provided_args) - len(args)) > 0:
+            raise TypeError(
+                f"{self.__class__.__name__}() missing {missing} required positional arguments: "
+                + ", ".join(non_kw_attributes_without_default[len(args) :])
+            )
+
+        errors: list[str] = []
         for field, attribute in self.__html_attributes__.items():
             if field in kwargs:
                 setattr(self, field, kwargs.pop(field))
@@ -168,6 +188,13 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
                 setattr(self, field, attribute.default)
             elif attribute.default_factory is not None:
                 setattr(self, field, attribute.default_factory())
+            else:
+                errors.append(field)
+        if errors:
+            raise TypeError(
+                f"{self.__class__.__name__}() missing {len(errors)} required keyword-only arguments: "
+                + " and ".join(f"'{f}'" for f in errors)
+            )
         # Random other kwargs
         for field, value in kwargs.items():
             setattr(self, field, value)
@@ -182,24 +209,42 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
         html_string = f"{block_indent}<{html_tag}"
 
         for key, attribute in self.__html_attributes__.items():
-            if not attribute.is_attribute:
+            if attribute.attribute_type != "attribute":
                 continue
             value = getattr(self, key, None)
             new_attribute = format_attribute(key, value, attribute)
             if new_attribute:
                 html_string += f" {new_attribute}"
 
-        if components := getattr(self, "components", None):
+        children: list[tuple[str | "BaseHtmlComponent" | Any, HtmlAttributeInfo]] = []
+        for key, attribute in self.__html_attributes__.items():
+            if attribute.attribute_type != "child":
+                continue
+            child = getattr(self, key, None)
+            if not child:
+                continue
+            # Add lists/iterables properly, but make sure not to just add strings as a list
+            if isinstance(child, str) or not hasattr(child, "__iter__"):
+                children.append((child, attribute))
+            else:
+                children.extend((c, attribute) for c in child)
+
+        if children:
             html_string += f">{endline}"
             new_indent_amount = indent + indent_step if format else 0
-            for c in components:
+            for c, attribute in children:
                 if isinstance(c, BaseHtmlComponent):
                     html_string += c.to_html(
                         indent=new_indent_amount, indent_step=indent_step, format=format
                     )
                 else:
+                    if attribute.transformer:
+                        value = attribute.transformer(c)
+                    else:
+                        value = str(c)
                     new_indent = " " * new_indent_amount
-                    html_string += f"{new_indent}{c}{endline}"
+                    html_string += f"{new_indent}{value}{endline}"
+
             html_string += f"{block_indent}</{html_tag}>{endline}"
         else:
             if self.get_config_value("tag_omission"):
@@ -230,19 +275,23 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
             subcls.__html_attributes__ |= extension.__html_attributes__
 
 
-def format_attribute(key: str, value: Any, attribute: HtmlAttributeInfo) -> str:
+def format_attribute(
+    key: str, value: Any, attribute: HtmlAttributeInfo, inner_multi: bool = False
+) -> str:
     """
     Formats the attribute to add to the html attributes.
     Depending on the value and attribute config, this can add zero, one or more attributes
     Returns the attribute to add e.g. `selected`, `type="button"` or `aria-type="button" aria-checked="false"`
     """
-    html_attribute = attribute.html_attribute or key
+    html_attribute = attribute.html_attribute or key if not inner_multi else key
     if value is None:
         return ""
-    if attribute.multi_attribute:
+    if not inner_multi and attribute.multi_attribute:
         # For an aria dict, treat each value as
         formatted = [
-            format_attribute(f"{html_attribute}-{sub_key}", sub_value, attribute)
+            format_attribute(
+                f"{html_attribute}-{sub_key}", sub_value, attribute, inner_multi=True
+            )
             for sub_key, sub_value in value.items()
         ]
         # Don't add empty attributes
