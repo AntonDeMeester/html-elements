@@ -105,3 +105,18 @@ def test_html_attribute_has_default_factory():
 def test_html_attribute_has_default_factory_list():
     attr = HtmlAttributeInfo(default=dict)
     assert attr.has_default() is True
+
+def test_comparison_true():
+    a = HtmlAttribute()
+    b = HtmlAttribute()
+    assert a == b
+
+def test_comparison_false():
+    a = HtmlAttribute(default="B")
+    b = HtmlAttribute(default="A")
+    assert a != b
+
+def test_comparison_different_class():
+    a = HtmlAttribute(default="B")
+    b = object()
+    assert a != b

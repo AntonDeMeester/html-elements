@@ -1,10 +1,11 @@
 from abc import ABC, ABCMeta
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type, TypedDict
+from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Literal, Type,
+                    TypedDict)
 
 from typing_extensions import dataclass_transform
 
 Undefined = object()
-HtmlAttributeType = Literal["attribute", "child"]
+HtmlAttributeType = Literal["attribute", "content"]
 
 
 class HtmlAttributeInfo:
@@ -135,8 +136,8 @@ class HtmlElementConfig(TypedDict):
     tag: str
 
 
-class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
-    __html_subclasses__: ClassVar[list[type["BaseHtmlComponent"]]] = []
+class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
+    __html_subclasses__: ClassVar[list[type["BaseHtmlElement"]]] = []
 
     # Defined on Metaclass
     if TYPE_CHECKING:
@@ -216,24 +217,24 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
             if new_attribute:
                 html_string += f" {new_attribute}"
 
-        children: list[tuple[str | "BaseHtmlComponent" | Any, HtmlAttributeInfo]] = []
+        content: list[tuple[str | "BaseHtmlElement" | Any, HtmlAttributeInfo]] = []
         for key, attribute in self.__html_attributes__.items():
-            if attribute.attribute_type != "child":
+            if attribute.attribute_type != "content":
                 continue
             child = getattr(self, key, None)
             if not child:
                 continue
             # Add lists/iterables properly, but make sure not to just add strings as a list
             if isinstance(child, str) or not hasattr(child, "__iter__"):
-                children.append((child, attribute))
+                content.append((child, attribute))
             else:
-                children.extend((c, attribute) for c in child)
+                content.extend((c, attribute) for c in child)
 
-        if children:
+        if content:
             html_string += f">{endline}"
             new_indent_amount = indent + indent_step if format else 0
-            for c, attribute in children:
-                if isinstance(c, BaseHtmlComponent):
+            for c, attribute in content:
+                if isinstance(c, BaseHtmlElement):
                     html_string += c.to_html(
                         indent=new_indent_amount, indent_step=indent_step, format=format
                     )
@@ -263,16 +264,6 @@ class BaseHtmlComponent(ABC, metaclass=HtmlMetaClass):
 
     def __repr__(self) -> str:
         return f"<{self.__html_config__['tag']}> field"
-
-    @classmethod
-    def add_extension(cls, extension: Type["BaseHtmlComponent"]) -> None:
-        """
-        Adds the HTML attributes of this extension to all subclasses so that they are included
-        This allows more than the MDN attributes to be included in the output HTML
-        #TODO Allow for proper typing of extensions
-        """
-        for subcls in cls.__html_subclasses__:
-            subcls.__html_attributes__ |= extension.__html_attributes__
 
 
 def format_attribute(

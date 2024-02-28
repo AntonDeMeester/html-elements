@@ -16,6 +16,7 @@ ruff = "^0.2.2"
 black = "^24.2.0"
 mkdocs = "^1.5.3"
 mkdocs-material = "^9.5.11"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Any, Literal, Union
 
-from .base import BaseHtmlComponent, HtmlAttribute, HtmlMetaClass
+from .base import BaseHtmlElement, HtmlAttribute, HtmlMetaClass
 
 TrueFalse = Literal["true", "false"]
 TrueFalseEmpty = Union[Literal[""], TrueFalse]
@@ -28,9 +28,7 @@ ReferrerPolicy = Literal[
 ]
 Target = Union[str, Literal["_self", "_blank", "_parent", "_top"]]
 Shape = Union[str, Literal["rect", "circle", "default", "poly"]]
-ControlsList = list[
-    Union[str, Literal["nodownload", "nofullscreen", "noremoteplayback"]]
-]
+ControlsList = Union[str, Literal["nodownload", "nofullscreen", "noremoteplayback"]]
 CrossOrigin = Literal["anonymous", "use-credentials"]
 Preload = Literal["", "none", "metadata", "auto"]
 ButtonType = Union[str, Literal["submit", "reset", "button"]]
@@ -261,22 +259,22 @@ class GlobalHtmlAttributes(ABC, metaclass=HtmlMetaClass):
     virtualkeyboardpolicy: VirtualKeyboardPolicy | None = HtmlAttribute(default=None)
 
 
-class NoComponentsHtmlComponent(
+class BaseNoChildrenHtmlElement(
     EventHandlerAttributes,
     GlobalHtmlAttributes,
-    BaseHtmlComponent,
+    BaseHtmlElement,
     ABC,
 ):
     pass
 
 
-class HtmlComponent(NoComponentsHtmlComponent, ABC):
-    components: list[Union[str, "BaseHtmlComponent"]] = HtmlAttribute(
-        default_factory=list, kw_only=False, is_attribute=False
+class BaseChildrenHtmlElement(BaseNoChildrenHtmlElement, ABC):
+    children: list[Union[str, "BaseHtmlElement"]] = HtmlAttribute(
+        default_factory=list, kw_only=False, attribute_type="content"
     )
 
 
-class A(HtmlComponent, tag="a"):
+class A(BaseChildrenHtmlElement, tag="a"):
     download: str | None = HtmlAttribute(default=None)
     href: str | None = HtmlAttribute(default=None)
     hreflang: str | None = HtmlAttribute(default=None)
@@ -291,15 +289,15 @@ class A(HtmlComponent, tag="a"):
     type: str | None = HtmlAttribute(default=None)
 
 
-class Abbr(HtmlComponent, tag="abbr"):
+class Abbr(BaseChildrenHtmlElement, tag="abbr"):
     pass
 
 
-class Address(HtmlComponent, tag="address"):
+class Address(BaseChildrenHtmlElement, tag="address"):
     pass
 
 
-class Area(NoComponentsHtmlComponent, tag="area", tag_omission=True):
+class Area(BaseNoChildrenHtmlElement, tag="area", tag_omission=True):
     alt: str | None = HtmlAttribute(default=None)
     coords: str | None = HtmlAttribute(default=None)
     download: str | None = HtmlAttribute(default=None)
@@ -314,16 +312,16 @@ class Area(NoComponentsHtmlComponent, tag="area", tag_omission=True):
     value: str | None = HtmlAttribute(default=None)
 
 
-class Article(HtmlComponent, tag="article"):
+class Article(BaseChildrenHtmlElement, tag="article"):
     height: str | None = HtmlAttribute(default=None)
     width: str | None = HtmlAttribute(default=None)
 
 
-class Aside(HtmlComponent, tag="aside"):
+class Aside(BaseChildrenHtmlElement, tag="aside"):
     pass
 
 
-class Audio(HtmlComponent, tag="audio"):
+class Audio(BaseChildrenHtmlElement, tag="audio"):
     autoplay: bool | None = HtmlAttribute(default=None)
     controls: bool | None = HtmlAttribute(default=None)
     controlslist: list[ControlsList] = HtmlAttribute(
@@ -337,53 +335,48 @@ class Audio(HtmlComponent, tag="audio"):
     src: str | None = HtmlAttribute(default=None)
 
 
-class B(HtmlComponent, tag="b"):
+class B(BaseChildrenHtmlElement, tag="b"):
     pass
 
 
-class Base(NoComponentsHtmlComponent, tag="base", tag_omission=True):
-    href: str
-    target: Target
+class Base(BaseNoChildrenHtmlElement, tag="base", tag_omission=True):
+    href: str = HtmlAttribute(default=None)
+    target: Target = HtmlAttribute(default=None)
 
 
-class Bdi(HtmlComponent, tag="bdi"):
+class Bdi(BaseChildrenHtmlElement, tag="bdi"):
     pass
 
 
-class Bdo(HtmlComponent, tag="bdo"):
+class Bdo(BaseChildrenHtmlElement, tag="bdo"):
     pass
 
 
-class Blockquote(HtmlComponent, tag="blockquote"):
-    cite: str
+class Blockquote(BaseChildrenHtmlElement, tag="blockquote"):
+    cite: str | None = HtmlAttribute(default=None)
 
 
-class Body(HtmlComponent, tag="body"):
+class Body(BaseChildrenHtmlElement, tag="body"):
     onafterprint: str | None = HtmlAttribute(default=None)
     onbeforeprint: str | None = HtmlAttribute(default=None)
     onbeforeunload: str | None = HtmlAttribute(default=None)
-    onblur: str | None = HtmlAttribute(default=None)
-    onerror: str | None = HtmlAttribute(default=None)
-    onfocus: str | None = HtmlAttribute(default=None)
     onhashchange: str | None = HtmlAttribute(default=None)
     onlanguagechange: str | None = HtmlAttribute(default=None)
-    onload: str | None = HtmlAttribute(default=None)
     onmessage: str | None = HtmlAttribute(default=None)
     onoffline: str | None = HtmlAttribute(default=None)
     ononline: str | None = HtmlAttribute(default=None)
     onpopstate: str | None = HtmlAttribute(default=None)
     onredo: str | None = HtmlAttribute(default=None)
-    onresize: str | None = HtmlAttribute(default=None)
     onstorage: str | None = HtmlAttribute(default=None)
     onundo: str | None = HtmlAttribute(default=None)
     onunload: str | None = HtmlAttribute(default=None)
 
 
-class Br(NoComponentsHtmlComponent, tag="br", tag_omission=True):
+class Br(BaseNoChildrenHtmlElement, tag="br", tag_omission=True):
     pass
 
 
-class Button(HtmlComponent, tag="button"):
+class Button(BaseChildrenHtmlElement, tag="button"):
     autofocus: bool | None = HtmlAttribute(default=None)
     disable: bool | None = HtmlAttribute(default=None)
     form: str | None = HtmlAttribute(default=None)
@@ -398,101 +391,101 @@ class Button(HtmlComponent, tag="button"):
     type: ButtonType = HtmlAttribute(default=None)
 
 
-class Canvas(HtmlComponent, tag="canvas"):
+class Canvas(BaseChildrenHtmlElement, tag="canvas"):
     pass
 
 
-class Caption(HtmlComponent, tag="caption", tag_omission=True):
+class Caption(BaseChildrenHtmlElement, tag="caption", tag_omission=True):
     pass
 
 
-class Cite(HtmlComponent, tag="cite"):
+class Cite(BaseChildrenHtmlElement, tag="cite"):
     pass
 
 
-class Code(HtmlComponent, tag="code"):
+class Code(BaseChildrenHtmlElement, tag="code"):
     pass
 
 
-class Col(NoComponentsHtmlComponent, tag="col", tag_omission=True):
+class Col(BaseNoChildrenHtmlElement, tag="col", tag_omission=True):
     span: int | None = HtmlAttribute(default=None)
 
 
-class Colgroup(HtmlComponent, tag="colgroup", tag_omission=True):
+class Colgroup(BaseChildrenHtmlElement, tag="colgroup", tag_omission=True):
     span: int | None = HtmlAttribute(default=None)
 
 
-class Data(HtmlComponent, tag="data"):
+class Data(BaseChildrenHtmlElement, tag="data"):
     value: Any = HtmlAttribute(default=None)
 
 
-class Datalist(HtmlComponent, tag="datalist"):
+class Datalist(BaseChildrenHtmlElement, tag="datalist"):
     pass
 
 
-class Dd(HtmlComponent, tag="dd", tag_omission=True):
+class Dd(BaseChildrenHtmlElement, tag="dd", tag_omission=True):
     pass
 
 
-class Del(HtmlComponent, tag="del"):
+class Del(BaseChildrenHtmlElement, tag="del"):
     cite: str | None = HtmlAttribute(default=None)
     datetime: str | None = HtmlAttribute(default=None)
 
 
-class Details(HtmlComponent, tag="details"):
+class Details(BaseChildrenHtmlElement, tag="details"):
     open: bool | None = HtmlAttribute(default=None)
 
 
-class Dfn(HtmlComponent, tag="dfn"):
+class Dfn(BaseChildrenHtmlElement, tag="dfn"):
     pass
 
 
-class Dialog(HtmlComponent, tag="dialog"):
+class Dialog(BaseChildrenHtmlElement, tag="dialog"):
     open: bool | None = HtmlAttribute(default=None)
 
 
-class Div(HtmlComponent, tag="div"):
+class Div(BaseChildrenHtmlElement, tag="div"):
     pass
 
 
-class Dl(HtmlComponent, tag="dl"):
+class Dl(BaseChildrenHtmlElement, tag="dl"):
     pass
 
 
-class Dt(HtmlComponent, tag="dt", tag_omission=True):
+class Dt(BaseChildrenHtmlElement, tag="dt", tag_omission=True):
     pass
 
 
-class Em(HtmlComponent, tag="em"):
+class Em(BaseChildrenHtmlElement, tag="em"):
     pass
 
 
-class Embed(NoComponentsHtmlComponent, tag="embed", tag_omission=True):
+class Embed(BaseNoChildrenHtmlElement, tag="embed", tag_omission=True):
     height: str | None = HtmlAttribute(default=None)
     src: str | None = HtmlAttribute(default=None)
     type: str | None = HtmlAttribute(default=None)
     width: str | None = HtmlAttribute(default=None)
 
 
-class Fieldset(HtmlComponent, tag="fieldset"):
+class Fieldset(BaseChildrenHtmlElement, tag="fieldset"):
     disabled: bool | None = HtmlAttribute(default=None)
     form: str | None = HtmlAttribute(default=None)
     name: str | None = HtmlAttribute(default=None)
 
 
-class Figcaption(HtmlComponent, tag="figcaption"):
+class Figcaption(BaseChildrenHtmlElement, tag="figcaption"):
     pass
 
 
-class Figure(HtmlComponent, tag="figure"):
+class Figure(BaseChildrenHtmlElement, tag="figure"):
     pass
 
 
-class Footer(HtmlComponent, tag="footer"):
+class Footer(BaseChildrenHtmlElement, tag="footer"):
     pass
 
 
-class Form(HtmlComponent, tag="form"):
+class Form(BaseChildrenHtmlElement, tag="form"):
     accept_charset: str | None = HtmlAttribute(
         default=None, html_attribute="accept-charset"
     )
@@ -503,65 +496,66 @@ class Form(HtmlComponent, tag="form"):
     action: str | None = HtmlAttribute(default=None)
     enctype: str | None = HtmlAttribute(default=None)
     method: str | None = HtmlAttribute(default=None)
-    novalidate: str | None = HtmlAttribute(default=None)
+    novalidate: bool | None = HtmlAttribute(default=None)
     target: Target | None = HtmlAttribute(default=None)
 
 
-class H1(HtmlComponent, tag="h1"):
+class H1(BaseChildrenHtmlElement, tag="h1"):
     pass
 
 
-class H2(HtmlComponent, tag="h2"):
+class H2(BaseChildrenHtmlElement, tag="h2"):
     pass
 
 
-class H3(HtmlComponent, tag="h3"):
+class H3(BaseChildrenHtmlElement, tag="h3"):
     pass
 
 
-class H4(HtmlComponent, tag="h4"):
+class H4(BaseChildrenHtmlElement, tag="h4"):
     pass
 
 
-class H5(HtmlComponent, tag="h5"):
+class H5(BaseChildrenHtmlElement, tag="h5"):
     pass
 
 
-class H6(HtmlComponent, tag="h6"):
+class H6(BaseChildrenHtmlElement, tag="h6"):
     pass
 
 
-class Head(HtmlComponent, tag="head", tag_omission=True):
+class Head(BaseChildrenHtmlElement, tag="head", tag_omission=True):
     pass
 
 
-class Header(HtmlComponent, tag="header"):
+class Header(BaseChildrenHtmlElement, tag="header"):
     pass
 
 
-class Hgroup(HtmlComponent, tag="hgroup"):
+class Hgroup(BaseChildrenHtmlElement, tag="hgroup"):
     pass
 
 
-class Hr(NoComponentsHtmlComponent, tag="hr", tag_omission=True):
+class Hr(BaseNoChildrenHtmlElement, tag="hr", tag_omission=True):
     pass
 
 
-class Html(HtmlComponent, tag="html"):
+class Html(BaseChildrenHtmlElement, tag="html"):
     xmlms: str | None = HtmlAttribute(default=None)
 
     def to_html(
         self, indent: int = 0, indent_step: int = 2, format: bool = True
     ) -> str:
         html = super().to_html(indent=indent, indent_step=indent_step, format=format)
-        return f"<!DOCTYPE html>\n{html}"
+        newline = "\n" if format else ""
+        return f"<!DOCTYPE html>{newline}{html}"
 
 
-class I(HtmlComponent, tag="i"):  # noqa: E742
+class I(BaseChildrenHtmlElement, tag="i"):  # noqa: E742
     pass
 
 
-class Iframe(NoComponentsHtmlComponent, tag="iframe"):
+class Iframe(BaseNoChildrenHtmlElement, tag="iframe"):
     allow: str | None = HtmlAttribute(default=None)
     allowfullscreen: TrueFalse | None = HtmlAttribute(default=None)
     height: str | None = HtmlAttribute(default=None)
@@ -576,7 +570,7 @@ class Iframe(NoComponentsHtmlComponent, tag="iframe"):
     width: str | None = HtmlAttribute(default=None)
 
 
-class Img(HtmlComponent, tag="img"):
+class Img(BaseChildrenHtmlElement, tag="img"):
     alt: str | None = HtmlAttribute(default=None)
     crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
     decoding: Decoding = HtmlAttribute(default=None)
@@ -587,17 +581,17 @@ class Img(HtmlComponent, tag="img"):
     loading: Loading = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy = HtmlAttribute(default=None)
     sizes: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
+        default_factory=list, transformer=lambda x: ", ".join(x)
     )
     src: str | None = HtmlAttribute(default=None)
     srcset: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
+        default_factory=list, transformer=lambda x: ", ".join(x)
     )
     width: str | None = HtmlAttribute(default=None)
     usemap: str | None = HtmlAttribute(default=None)
 
 
-class Input(NoComponentsHtmlComponent, tag="input", tag_omission=True):
+class Input(BaseNoChildrenHtmlElement, tag="input", tag_omission=True):
     accept: str | None = HtmlAttribute(default=None)
     alt: str | None = HtmlAttribute(default=None)
     autocomplete: AutoComplete | None = HtmlAttribute(default=None)
@@ -613,10 +607,10 @@ class Input(NoComponentsHtmlComponent, tag="input", tag_omission=True):
     formtarget: Target = HtmlAttribute(default=None)
     height: str | None = HtmlAttribute(default=None)
     list: str | None = HtmlAttribute(default=None)
-    max: str | None = HtmlAttribute(default=None)
-    maxlength: str | None = HtmlAttribute(default=None)
-    min: str | None = HtmlAttribute(default=None)
-    minlength: str | None = HtmlAttribute(default=None)
+    max: int | None = HtmlAttribute(default=None)
+    maxlength: int | None = HtmlAttribute(default=None)
+    min: int | None = HtmlAttribute(default=None)
+    minlength: int | None = HtmlAttribute(default=None)
     multiple: bool | None = HtmlAttribute(default=None)
     name: str | None = HtmlAttribute(default=None)
     pattern: str | None = HtmlAttribute(default=None)
@@ -625,7 +619,7 @@ class Input(NoComponentsHtmlComponent, tag="input", tag_omission=True):
     popovertargetaction: PopoverTargetAction | None = HtmlAttribute(default=None)
     readonly: bool | None = HtmlAttribute(default=None)
     required: bool | None = HtmlAttribute(default=None)
-    size: str | None = HtmlAttribute(default=None)
+    size: int | None = HtmlAttribute(default=None)
     src: str | None = HtmlAttribute(default=None)
     step: int | None = HtmlAttribute(default=None)
     type: InputType = HtmlAttribute(default=None)
@@ -636,69 +630,75 @@ class Input(NoComponentsHtmlComponent, tag="input", tag_omission=True):
 # TODO Create separate classes for each Input Type with the relevant attributes
 
 
-class Ins(HtmlComponent, tag="ins"):
+class Ins(BaseChildrenHtmlElement, tag="ins"):
     cite: str | None = HtmlAttribute(default=None)
     datetime: str | None = HtmlAttribute(default=None)
 
 
-class Kbd(HtmlComponent, tag="kbd"):
+class Kbd(BaseChildrenHtmlElement, tag="kbd"):
     pass
 
 
-class Label(HtmlComponent, tag="label"):
+class Label(BaseChildrenHtmlElement, tag="label"):
     for_: str | None = HtmlAttribute(default=None, html_attribute="for")
 
 
-class Legend(HtmlComponent, tag="legend"):
+class Legend(BaseChildrenHtmlElement, tag="legend"):
     pass
 
 
-class Li(HtmlComponent, tag="li", tag_omission=True):
+class Li(BaseChildrenHtmlElement, tag="li", tag_omission=True):
     value: int | None = HtmlAttribute(default=None)
 
 
-class Link(NoComponentsHtmlComponent, tag="link", tag_omission=True):
+class Link(BaseNoChildrenHtmlElement, tag="link", tag_omission=True):
     as_: str | None = HtmlAttribute(default=None, html_attribute="as")
     crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
     fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
     href: str | None = HtmlAttribute(default=None)
     hreflang: str | None = HtmlAttribute(default=None)
-    imagesizes: str | None = HtmlAttribute(default=None)
-    imagesrcset: str | None = HtmlAttribute(default=None)
+    imagesizes: list[str] | None = HtmlAttribute(
+        default_factory=list, transformer=lambda x: ", ".join(x)
+    )
+    imagesrcset: list[str] | None = HtmlAttribute(
+        default_factory=list, transformer=lambda x: ", ".join(x)
+    )
     integrity: str | None = HtmlAttribute(default=None)
     media: str | None = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
     rel: list[str] = HtmlAttribute(
         default_factory=list, transformer=lambda x: " ".join(x)
     )
-    sizes: str | None = HtmlAttribute(default=None)
+    sizes: list[str] = HtmlAttribute(
+        default_factory=list, transformer=lambda x: " ".join(x)
+    )
     type: str | None = HtmlAttribute(default=None)
 
 
-class Main(HtmlComponent, tag="main"):
+class Main(BaseChildrenHtmlElement, tag="main"):
     pass
 
 
-class Map(HtmlComponent, tag="map"):
+class Map(BaseChildrenHtmlElement, tag="map"):
     name: str | None = HtmlAttribute(default=None)
 
 
-class Mark(HtmlComponent, tag="mark"):
+class Mark(BaseChildrenHtmlElement, tag="mark"):
     pass
 
 
-class Menu(HtmlComponent, tag="menu"):
+class Menu(BaseChildrenHtmlElement, tag="menu"):
     pass
 
 
-class Meta(NoComponentsHtmlComponent, tag="meta", tag_omission=True):
+class Meta(BaseNoChildrenHtmlElement, tag="meta", tag_omission=True):
     charset: str | None = HtmlAttribute(default=None)
     content: str | None = HtmlAttribute(default=None)
     http_equiv: str | None = HtmlAttribute(default=None, html_attribute="http-equiv")
     name: str | None = HtmlAttribute(default=None)
 
 
-class Meter(HtmlComponent, tag="meter"):
+class Meter(BaseChildrenHtmlElement, tag="meter"):
     value: Any = HtmlAttribute(default=None)
     min: float | None = HtmlAttribute(default=None)
     max: float | None = HtmlAttribute(default=None)
@@ -708,15 +708,15 @@ class Meter(HtmlComponent, tag="meter"):
     form: str | None = HtmlAttribute(default=None)
 
 
-class Nav(HtmlComponent, tag="nav"):
+class Nav(BaseChildrenHtmlElement, tag="nav"):
     pass
 
 
-class Noscript(HtmlComponent, tag="noscript"):
+class Noscript(BaseChildrenHtmlElement, tag="noscript"):
     pass
 
 
-class Object(HtmlComponent, tag="object"):
+class Object(BaseChildrenHtmlElement, tag="object"):
     data: Any = HtmlAttribute(default=None)
     form: str | None = HtmlAttribute(default=None)
     height: str | None = HtmlAttribute(default=None)
@@ -725,79 +725,79 @@ class Object(HtmlComponent, tag="object"):
     width: str | None = HtmlAttribute(default=None)
 
 
-class Ol(HtmlComponent, tag="ol"):
+class Ol(BaseChildrenHtmlElement, tag="ol"):
     reversed: bool | None = HtmlAttribute(default=None)
     start: int | None = HtmlAttribute(default=None)
     type: ListType = HtmlAttribute(default=None)
 
 
-class Optgroup(HtmlComponent, tag="optgroup"):
+class Optgroup(BaseChildrenHtmlElement, tag="optgroup"):
     disabled: bool | None = HtmlAttribute(default=None)
     label: str | None = HtmlAttribute(default=None)
 
 
-class Option(HtmlComponent, tag="option"):
+class Option(BaseChildrenHtmlElement, tag="option"):
     disabled: bool | None = HtmlAttribute(default=None)
     label: str | None = HtmlAttribute(default=None)
     selected: bool | None = HtmlAttribute(default=None)
     value: Any = HtmlAttribute(default=None)
 
 
-class Output(HtmlComponent, tag="output"):
+class Output(BaseChildrenHtmlElement, tag="output"):
     for_: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
+        default_factory=list, transformer=lambda x: " ".join(x), html_attribute="for"
     )
     form: str | None = HtmlAttribute(default=None)
     name: str | None = HtmlAttribute(default=None)
 
 
-class P(HtmlComponent, tag="p"):
+class P(BaseChildrenHtmlElement, tag="p"):
     pass
 
 
-class Picture(HtmlComponent, tag="picture"):
+class Picture(BaseChildrenHtmlElement, tag="picture"):
     pass
 
 
-class Portal(HtmlComponent, tag="portal"):
+class Portal(BaseChildrenHtmlElement, tag="portal"):
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
     src: str | None = HtmlAttribute(default=None)
 
 
-class Pre(HtmlComponent, tag="pre"):
+class Pre(BaseChildrenHtmlElement, tag="pre"):
     pass
 
 
-class Progress(HtmlComponent, tag="progress"):
+class Progress(BaseChildrenHtmlElement, tag="progress"):
     max: float | None = HtmlAttribute(default=None)
     value: float | None = HtmlAttribute(default=None)
 
 
-class Q(HtmlComponent, tag="q"):
+class Q(BaseChildrenHtmlElement, tag="q"):
     cite: str | None = HtmlAttribute(default=None)
 
 
-class Rp(HtmlComponent, tag="rp", tag_omission=True):
+class Rp(BaseChildrenHtmlElement, tag="rp", tag_omission=True):
     pass
 
 
-class Rt(HtmlComponent, tag="rt", tag_omission=True):
+class Rt(BaseChildrenHtmlElement, tag="rt", tag_omission=True):
     pass
 
 
-class Ruby(HtmlComponent, tag="ruby"):
+class Ruby(BaseChildrenHtmlElement, tag="ruby"):
     pass
 
 
-class S(HtmlComponent, tag="s"):
+class S(BaseChildrenHtmlElement, tag="s"):
     pass
 
 
-class Samp(HtmlComponent, tag="samp"):
+class Samp(BaseChildrenHtmlElement, tag="samp"):
     pass
 
 
-class Script(HtmlComponent, tag="script"):
+class Script(BaseChildrenHtmlElement, tag="script"):
     async_: bool | None = HtmlAttribute(default=None, html_attribute="async")
     blocking: list[Blocking] = HtmlAttribute(
         default_factory=list, transformer=lambda x: " ".join(x)
@@ -807,23 +807,21 @@ class Script(HtmlComponent, tag="script"):
     fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
     integrity: str | None = HtmlAttribute(default=None)
     nomodule: bool | None = HtmlAttribute(default=None)
-    nonce: str | None = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
     src: str | None = HtmlAttribute(default=None)
     type: ScriptType = HtmlAttribute(default=None)
 
 
-class Search(HtmlComponent, tag="search"):
+class Search(BaseChildrenHtmlElement, tag="search"):
     pass
 
 
-class Section(HtmlComponent, tag="section"):
+class Section(BaseChildrenHtmlElement, tag="section"):
     pass
 
 
-class Select(HtmlComponent, tag="select"):
+class Select(BaseChildrenHtmlElement, tag="select"):
     autocomplete: AutoComplete | None = HtmlAttribute(default=None)
-    autofocus: bool | None = HtmlAttribute(default=None)
     disabled: bool | None = HtmlAttribute(default=None)
     form: str | None = HtmlAttribute(default=None)
     multiple: bool | None = HtmlAttribute(default=None)
@@ -832,19 +830,19 @@ class Select(HtmlComponent, tag="select"):
     size: int | None = HtmlAttribute(default=None)
 
 
-class Slot(HtmlComponent, tag="slot"):
+class Slot(BaseChildrenHtmlElement, tag="slot"):
     name: str | None = HtmlAttribute(default=None)
 
 
-class Small(HtmlComponent, tag="small"):
+class Small(BaseChildrenHtmlElement, tag="small"):
     pass
 
 
-class Source(NoComponentsHtmlComponent, tag="source", tag_omission=True):
+class Source(BaseNoChildrenHtmlElement, tag="source", tag_omission=True):
     type: str | None = HtmlAttribute(default=None)
     src: str | None = HtmlAttribute(default=None)
     srcset: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
+        default_factory=list, transformer=lambda x: ", ".join(x)
     )
     sizes: list[str] = HtmlAttribute(
         default_factory=list, transformer=lambda x: ", ".join(x)
@@ -854,41 +852,40 @@ class Source(NoComponentsHtmlComponent, tag="source", tag_omission=True):
     width: str | None = HtmlAttribute(default=None)
 
 
-class Span(HtmlComponent, tag="span"):
+class Span(BaseChildrenHtmlElement, tag="span"):
     pass
 
 
-class Strong(HtmlComponent, tag="strong"):
+class Strong(BaseChildrenHtmlElement, tag="strong"):
     pass
 
 
-class Style(HtmlComponent, tag="style"):
+class Style(BaseChildrenHtmlElement, tag="style"):
     blocking: Blocking | None = HtmlAttribute(default=None)
     media: str | None = HtmlAttribute(default=None)
-    nonce: str | None = HtmlAttribute(default=None)
 
 
-class Sub(HtmlComponent, tag="sub"):
+class Sub(BaseChildrenHtmlElement, tag="sub"):
     pass
 
 
-class Summary(HtmlComponent, tag="summary"):
+class Summary(BaseChildrenHtmlElement, tag="summary"):
     pass
 
 
-class Sup(HtmlComponent, tag="sup"):
+class Sup(BaseChildrenHtmlElement, tag="sup"):
     pass
 
 
-class Table(HtmlComponent, tag="table"):
+class Table(BaseChildrenHtmlElement, tag="table"):
     pass
 
 
-class Tbody(HtmlComponent, tag="tbody", tag_omission=True):
+class Tbody(BaseChildrenHtmlElement, tag="tbody", tag_omission=True):
     pass
 
 
-class Td(HtmlComponent, tag="td", tag_omission=True):
+class Td(BaseChildrenHtmlElement, tag="td", tag_omission=True):
     colspan: int | None = HtmlAttribute(default=None)
     headers: list[str] = HtmlAttribute(
         default_factory=list, transformer=lambda x: " ".join(x)
@@ -896,14 +893,13 @@ class Td(HtmlComponent, tag="td", tag_omission=True):
     rowspan: int | None = HtmlAttribute(default=None)
 
 
-class Template(HtmlComponent, tag="template"):
+class Template(BaseChildrenHtmlElement, tag="template"):
     shadowrootmode: ShadowRootMode = HtmlAttribute(default=None)
 
 
-class Textarea(HtmlComponent, tag="textarea"):
+class Textarea(BaseChildrenHtmlElement, tag="textarea"):
     autocapitalize: AutoCapitalize | None = HtmlAttribute(default=None)
     autocomplete: AutoComplete | None = HtmlAttribute(default=None)
-    autofocus: bool | None = HtmlAttribute(default=None)
     cols: int | None = HtmlAttribute(default=None)
     dirname: str | None = HtmlAttribute(default=None)
     disabled: bool | None = HtmlAttribute(default=None)
@@ -918,11 +914,11 @@ class Textarea(HtmlComponent, tag="textarea"):
     wrap: Wrap | None = HtmlAttribute(default=None)
 
 
-class Tfoot(HtmlComponent, tag="tfoot", tag_omission=True):
+class Tfoot(BaseChildrenHtmlElement, tag="tfoot", tag_omission=True):
     pass
 
 
-class Th(HtmlComponent, tag="th", tag_omission=True):
+class Th(BaseChildrenHtmlElement, tag="th", tag_omission=True):
     abbr: str | None = HtmlAttribute(default=None)
     colspan: int | None = HtmlAttribute(default=None)
     headers: list[str] = HtmlAttribute(
@@ -932,23 +928,23 @@ class Th(HtmlComponent, tag="th", tag_omission=True):
     scope: ThScope | None = HtmlAttribute(default=None)
 
 
-class Thead(HtmlComponent, tag="thead", tag_omission=True):
+class Thead(BaseChildrenHtmlElement, tag="thead", tag_omission=True):
     pass
 
 
-class Time(HtmlComponent, tag="time"):
+class Time(BaseChildrenHtmlElement, tag="time"):
     datetime: str | None = HtmlAttribute(default=None)
 
 
-class Title(HtmlComponent, tag="title"):
+class Title(BaseChildrenHtmlElement, tag="title"):
     pass
 
 
-class Tr(HtmlComponent, tag="tr", tag_omission=True):
+class Tr(BaseChildrenHtmlElement, tag="tr", tag_omission=True):
     pass
 
 
-class Track(NoComponentsHtmlComponent, tag="track", tag_omission=True):
+class Track(BaseNoChildrenHtmlElement, tag="track", tag_omission=True):
     default: bool | None = HtmlAttribute(default=None)
     kind: TrackType | None = HtmlAttribute(default=None)
     label: str | None = HtmlAttribute(default=None)
@@ -956,19 +952,19 @@ class Track(NoComponentsHtmlComponent, tag="track", tag_omission=True):
     srclang: str | None = HtmlAttribute(default=None)
 
 
-class U(HtmlComponent, tag="u"):
+class U(BaseChildrenHtmlElement, tag="u"):
     pass
 
 
-class Ul(HtmlComponent, tag="ul"):
+class Ul(BaseChildrenHtmlElement, tag="ul"):
     pass
 
 
-class Var(HtmlComponent, tag="var"):
+class Var(BaseChildrenHtmlElement, tag="var"):
     pass
 
 
-class Video(HtmlComponent, tag="video"):
+class Video(BaseChildrenHtmlElement, tag="video"):
     autoplay: bool | None = HtmlAttribute(default=None)
     controls: str | None = HtmlAttribute(default=None)
     controlslist: list[ControlsList] = HtmlAttribute(
@@ -987,5 +983,5 @@ class Video(HtmlComponent, tag="video"):
     width: str | None = HtmlAttribute(default=None)
 
 
-class Wbr(NoComponentsHtmlComponent, tag="wbr", tag_omission=True):
+class Wbr(BaseNoChildrenHtmlElement, tag="wbr", tag_omission=True):
     pass

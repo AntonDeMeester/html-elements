@@ -2,10 +2,10 @@ from abc import ABC
 from typing import Any
 
 import pytest
-from html_elements.base import BaseHtmlComponent, HtmlAttribute
+from html_elements.base import BaseHtmlElement, HtmlAttribute
 
 
-class AbstractElement(BaseHtmlComponent, ABC):
+class AbstractElement(BaseHtmlElement, ABC):
     string: str | None = HtmlAttribute(default=None)
     integer: int | None = HtmlAttribute(default=None)
     floating: float | None = HtmlAttribute(default=None)
@@ -29,7 +29,7 @@ class AbstractElement(BaseHtmlComponent, ABC):
     transformer: int | None = HtmlAttribute(default=None, transformer=lambda x: x * 10)
 
 
-class InitTest(BaseHtmlComponent, tag="init"):
+class InitTest(BaseHtmlElement, tag="init"):
     non_kw: str = HtmlAttribute(kw_only=False)
     non_kw_two: str | None = HtmlAttribute(default=None, kw_only=False)
     non_kw_three: str = HtmlAttribute(default_factory=lambda: "test", kw_only=False)
@@ -41,21 +41,21 @@ class InitTest(BaseHtmlComponent, tag="init"):
     other: str
 
 
-class SimpleToHtmlComponent(BaseHtmlComponent, tag="easy"):
-    children: list[str | BaseHtmlComponent] = HtmlAttribute(
-        attribute_type="child", kw_only=False, default_factory=list
+class SimpleToHtmlComponent(BaseHtmlElement, tag="easy"):
+    children: list[str | BaseHtmlElement] = HtmlAttribute(
+        attribute_type="content", kw_only=False, default_factory=list
     )
 
 
 class ToHtmlComponent(AbstractElement, tag="to-html"):
-    children: list[str | BaseHtmlComponent] = HtmlAttribute(
-        attribute_type="child", kw_only=False, default_factory=list
+    children: list[str | BaseHtmlElement] = HtmlAttribute(
+        attribute_type="content", kw_only=False, default_factory=list
     )
     children_two: str = HtmlAttribute(
-        attribute_type="child", kw_only=False, default=None
+        attribute_type="content", kw_only=False, default=None
     )
     children_three: float = HtmlAttribute(
-        attribute_type="child",
+        attribute_type="content",
         kw_only=True,
         default=0,
         transformer=lambda x: f"{x:.2f}",
@@ -63,17 +63,17 @@ class ToHtmlComponent(AbstractElement, tag="to-html"):
     bla: str = ""
 
 
-class NoTagOmission(BaseHtmlComponent, tag="no-omis", tag_omission=False):
+class NoTagOmission(BaseHtmlElement, tag="no-omis", tag_omission=False):
     field: str = HtmlAttribute(attribute_type="attribute", default=None)
 
 
-class TagOmission(BaseHtmlComponent, tag="omis", tag_omission=True):
+class TagOmission(BaseHtmlElement, tag="omis", tag_omission=True):
     field: str = HtmlAttribute(attribute_type="attribute", default=None)
 
 
-class TagOmissionWithChildren(BaseHtmlComponent, tag="omis-c", tag_omission=True):
+class TagOmissionWithChildren(BaseHtmlElement, tag="omis-c", tag_omission=True):
     field: str = HtmlAttribute(attribute_type="attribute", default=None)
-    children: str = HtmlAttribute(attribute_type="child", default="")
+    children: str = HtmlAttribute(attribute_type="content", default="")
 
 
 def double(x: str) -> str:
@@ -81,14 +81,14 @@ def double(x: str) -> str:
 
 
 def test_basic_setup():
-    class BaseElement(BaseHtmlComponent, tag="base"):
+    class BaseElement(BaseHtmlElement, tag="base"):
         string: str = HtmlAttribute(default=None)
 
     base = BaseElement(string="test")
     assert base.__html_attributes__ == {"string": HtmlAttribute(default=None)}
     assert base.__html_config__ == {"tag_omission": False, "tag": "base"}
     assert not hasattr(BaseElement, "string")
-    assert BaseElement in BaseHtmlComponent.__html_subclasses__
+    assert BaseElement in BaseHtmlElement.__html_subclasses__
     assert base.to_html(format=False) == '<base string="test"></base>'
 
 
@@ -107,7 +107,7 @@ def test_inheritance():
         default="blabla", transformer=double, html_attribute="not-string"
     )
     assert derived.__html_config__ == {"tag_omission": False, "tag": "derived"}
-    assert DerivedElement in BaseHtmlComponent.__html_subclasses__
+    assert DerivedElement in BaseHtmlElement.__html_subclasses__
     assert (
         derived.to_html(format=False)
         == '<derived not-string="testtest" integer="5" dictionary="this=here"></derived>'
@@ -115,11 +115,11 @@ def test_inheritance():
 
 
 def test_inheritance_is_left_to_right_priority():
-    class One(BaseHtmlComponent, ABC):
+    class One(BaseHtmlElement, ABC):
         field: str = HtmlAttribute(default="one")
         one: str = HtmlAttribute(default=None)
 
-    class Two(BaseHtmlComponent, ABC):
+    class Two(BaseHtmlElement, ABC):
         field: str = HtmlAttribute(default="two")
         two: str = HtmlAttribute(default=None)
 
@@ -148,12 +148,12 @@ def test_non_html_attribute_is_ignored():
 def test_tag_required():
     with pytest.raises(TypeError):
 
-        class Derived(BaseHtmlComponent):  # type: ignore
+        class Derived(BaseHtmlElement):  # type: ignore
             pass
 
 
 def test_tag_not_required_if_abc():
-    class Derived(BaseHtmlComponent, ABC):  # type: ignore
+    class Derived(BaseHtmlElement, ABC):  # type: ignore
         pass
 
 
@@ -240,10 +240,22 @@ def test_init_random_missing_other_fields():
     b = InitTest("one", kw="hello")  # type: ignore
     assert not hasattr(b, "other")
 
+def test_init_provide_arg_as_kwarg():
+    with pytest.raises(TypeError) as e:
+        InitTest("one", non_kw="two")  # type: ignore
+        assert (
+            e.value.args[0]
+            == "Got multiple values for argument 'non_kw'"
+        )
 
 def test_to_html_empty():
     c = ToHtmlComponent()
     assert c.to_html(format=False) == "<to-html></to-html>"
+
+
+def test_str_is_to_html():
+    c = ToHtmlComponent()
+    assert str(c) == "<to-html></to-html>\n"
 
 
 def test_to_html_expansive():
@@ -573,3 +585,6 @@ def test_to_html_tag_omission_children_optional_children():
 def test_to_html_tag_omission_children_attribute_children():
     c = TagOmissionWithChildren(children="Hello", field="test")
     assert c.to_html(format=False) == '<omis-c field="test">Hello</omis-c>'
+def test_repr():
+    c = ToHtmlComponent()
+    assert repr(c) == "<to-html> field"
