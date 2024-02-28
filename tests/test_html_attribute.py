@@ -30,7 +30,7 @@ def test_html_attribute_info_values():
         html_attribute="test",
         transformer=lambda x: x + "bla",
         multi_attribute=True,
-        attribute_type="child",
+        attribute_type="content",
         init=False,
         default=None,
         default_factory=None,

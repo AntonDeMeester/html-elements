@@ -97,7 +97,7 @@ def test_inheritance():
 
     class DerivedElement(AbstractElement, tag="derived"):
         new_field: str = HtmlAttribute(default=None)
-        string: str = HtmlAttribute(
+        string: str | None = HtmlAttribute(
             default="blabla", transformer=double, html_attribute="not-string"
         )
 

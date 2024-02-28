@@ -1,5 +1,5 @@
 from abc import ABC, ABCMeta
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, TypedDict
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, TypedDict, Union
 
 from typing_extensions import dataclass_transform
 
@@ -216,7 +216,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
             if new_attribute:
                 html_string += f" {new_attribute}"
 
-        content: list[tuple[str | "BaseHtmlElement" | Any, HtmlAttributeInfo]] = []
+        content: list[tuple[Union[str, "BaseHtmlElement", Any], HtmlAttributeInfo]] = []
         for key, attribute in self.__html_attributes__.items():
             if attribute.attribute_type != "content":
                 continue
