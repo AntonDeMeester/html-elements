@@ -14,12 +14,8 @@ class AbstractElement(BaseHtmlElement, ABC):
         default_factory=dict,
         transformer=lambda x: "; ".join(f"{k}={v}" for k, v in x.items()),
     )
-    array: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
-    multi_attribute: dict[str, Any] | None = HtmlAttribute(
-        default_factory=dict, multi_attribute=True, html_attribute="multi"
-    )
+    array: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    multi_attribute: dict[str, Any] | None = HtmlAttribute(default_factory=dict, multi_attribute=True, html_attribute="multi")
     multi_attribute_int: dict[str, int] | None = HtmlAttribute(
         default_factory=dict,
         multi_attribute=True,
@@ -42,18 +38,12 @@ class InitTest(BaseHtmlElement, tag="init"):
 
 
 class SimpleToHtmlComponent(BaseHtmlElement, tag="easy"):
-    children: list[str | BaseHtmlElement] = HtmlAttribute(
-        attribute_type="content", kw_only=False, default_factory=list
-    )
+    children: list[str | BaseHtmlElement] = HtmlAttribute(attribute_type="content", kw_only=False, default_factory=list)
 
 
 class ToHtmlComponent(AbstractElement, tag="to-html"):
-    children: list[str | BaseHtmlElement] = HtmlAttribute(
-        attribute_type="content", kw_only=False, default_factory=list
-    )
-    children_two: str = HtmlAttribute(
-        attribute_type="content", kw_only=False, default=None
-    )
+    children: list[str | BaseHtmlElement] = HtmlAttribute(attribute_type="content", kw_only=False, default_factory=list)
+    children_two: str = HtmlAttribute(attribute_type="content", kw_only=False, default=None)
     children_three: float = HtmlAttribute(
         attribute_type="content",
         kw_only=True,
@@ -97,9 +87,7 @@ def test_inheritance():
 
     class DerivedElement(AbstractElement, tag="derived"):
         new_field: str = HtmlAttribute(default=None)
-        string: str | None = HtmlAttribute(
-            default="blabla", transformer=double, html_attribute="not-string"
-        )
+        string: str | None = HtmlAttribute(default="blabla", transformer=double, html_attribute="not-string")
 
     derived = DerivedElement(string="test", integer=5, dictionary={"this": "here"})
 
@@ -108,10 +96,7 @@ def test_inheritance():
     )
     assert derived.__html_config__ == {"tag_omission": False, "tag": "derived"}
     assert DerivedElement in BaseHtmlElement.__html_subclasses__
-    assert (
-        derived.to_html(format=False)
-        == '<derived not-string="testtest" integer="5" dictionary="this=here"></derived>'
-    )
+    assert derived.to_html(format=False) == '<derived not-string="testtest" integer="5" dictionary="this=here"></derived>'
 
 
 def test_inheritance_is_left_to_right_priority():
@@ -209,10 +194,7 @@ def test_init_non_kw_provide_all_kw():
 def test_init_non_kw_provide_provide_too_little():
     with pytest.raises(TypeError) as e:
         InitTest(kw="hello", other="Hello")  # type: ignore
-        assert (
-            e.value.args[0]
-            == "InitTest() missing 1 required positional arguments: 'non_kw'"
-        )
+        assert e.value.args[0] == "InitTest() missing 1 required positional arguments: 'non_kw'"
 
 
 def test_init_non_kw_provide_provide_too_many():
@@ -224,10 +206,7 @@ def test_init_non_kw_provide_provide_too_many():
 def test_init_kw_missing():
     with pytest.raises(TypeError) as e:
         InitTest("one")  # type: ignore
-        assert (
-            e.value.args[0]
-            == "InitTest() missing 1 required keyword-only arguments: 'kw'"
-        )
+        assert e.value.args[0] == "InitTest() missing 1 required keyword-only arguments: 'kw'"
 
 
 def test_init_random_other_kw():
@@ -381,10 +360,7 @@ Hello world
 
 def test_to_html_dict():
     c = ToHtmlComponent(dictionary={"foo": "bar", "one": "two", "three": "four"})
-    assert (
-        c.to_html(format=False)
-        == '<to-html dictionary="foo=bar; one=two; three=four"></to-html>'
-    )
+    assert c.to_html(format=False) == '<to-html dictionary="foo=bar; one=two; three=four"></to-html>'
 
 
 def test_to_html_list():
@@ -428,18 +404,12 @@ def test_to_html_multi_attribute():
             "false": False,
         }
     )
-    assert (
-        c.to_html(format=False)
-        == '<to-html multi-foo="bar" multi-one="two" multi-true></to-html>'
-    )
+    assert c.to_html(format=False) == '<to-html multi-foo="bar" multi-one="two" multi-true></to-html>'
 
 
 def test_to_html_multi_attribute_with_transformer():
     c = ToHtmlComponent(multi_attribute_int={"foo": 1, "bar": 5, "zero": 0})
-    assert (
-        c.to_html(format=False)
-        == '<to-html multint-foo="10" multint-bar="50" multint-zero="0"></to-html>'
-    )
+    assert c.to_html(format=False) == '<to-html multint-foo="10" multint-bar="50" multint-zero="0"></to-html>'
 
 
 def test_to_html_ignore_non_html_attributes():
@@ -468,9 +438,7 @@ def test_to_html_children_list_string_format():
 
 
 def test_to_html_children_list_components_format():
-    c = ToHtmlComponent(
-        children=[SimpleToHtmlComponent(["test"]), SimpleToHtmlComponent(["other"])]
-    )
+    c = ToHtmlComponent(children=[SimpleToHtmlComponent(["test"]), SimpleToHtmlComponent(["other"])])
     assert (
         c.to_html(format=True)
         == """<to-html>
@@ -486,13 +454,8 @@ def test_to_html_children_list_components_format():
 
 
 def test_to_html_children_list_components_no_format():
-    c = ToHtmlComponent(
-        children=[SimpleToHtmlComponent(["test"]), SimpleToHtmlComponent(["other"])]
-    )
-    assert (
-        c.to_html(format=False)
-        == """<to-html><easy>test</easy><easy>other</easy></to-html>"""
-    )
+    c = ToHtmlComponent(children=[SimpleToHtmlComponent(["test"]), SimpleToHtmlComponent(["other"])])
+    assert c.to_html(format=False) == """<to-html><easy>test</easy><easy>other</easy></to-html>"""
 
 
 def test_to_html_children_list_combined_format():

@@ -70,9 +70,7 @@ def HtmlAttribute(
     Creates a new HTML Attribute to include in the output HTML values
     """
     if default is not Undefined and default_factory is not None:
-        raise ValueError(
-            "Cannot set both default and default factory on an HTML Attribute"
-        )
+        raise ValueError("Cannot set both default and default factory on an HTML Attribute")
     return HtmlAttributeInfo(
         html_attribute=html_attribute,
         transformer=transformer,
@@ -149,13 +147,9 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
 
     def __init__(self, *args: Any, **kwargs: Any):
         # yes, this is basically reimplementing dataclasses __init__ but dataclass_transform doesn't work well if it has @dataclass
-        non_kw_attributes = [
-            k for k, v in self.__html_attributes__.items() if v.kw_only is False
-        ]
+        non_kw_attributes = [k for k, v in self.__html_attributes__.items() if v.kw_only is False]
         non_kw_attributes_without_default = [
-            k
-            for k, v in self.__html_attributes__.items()
-            if v.kw_only is False and not v.has_default()
+            k for k, v in self.__html_attributes__.items() if v.kw_only is False and not v.has_default()
         ]
         i = -1
         for i, value in enumerate(args):
@@ -171,9 +165,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
                 raise TypeError(f"Got multiple values for argument '{field}'")
             kwargs[field] = value
 
-        not_provided_args = [
-            v for v in non_kw_attributes_without_default if v not in kwargs
-        ]
+        not_provided_args = [v for v in non_kw_attributes_without_default if v not in kwargs]
         if (missing := len(not_provided_args) - len(args)) > 0:
             raise TypeError(
                 f"{self.__class__.__name__}() missing {missing} required positional arguments: "
@@ -199,9 +191,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
         for field, value in kwargs.items():
             setattr(self, field, value)
 
-    def to_html(
-        self, indent: int = 0, indent_step: int = 2, format: bool = True
-    ) -> str:
+    def to_html(self, indent: int = 0, indent_step: int = 2, format: bool = True) -> str:
         # https://github.com/justpy-org/justpy/blob/master/justpy/htmlcomponents.py#L459C5-L474C17
         block_indent = " " * indent if format else ""
         endline = "\n" if format else ""
@@ -234,9 +224,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
             new_indent_amount = indent + indent_step if format else 0
             for c, attribute in content:
                 if isinstance(c, BaseHtmlElement):
-                    html_string += c.to_html(
-                        indent=new_indent_amount, indent_step=indent_step, format=format
-                    )
+                    html_string += c.to_html(indent=new_indent_amount, indent_step=indent_step, format=format)
                 else:
                     if attribute.transformer:
                         value = attribute.transformer(c)
@@ -265,9 +253,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
         return f"<{self.__html_config__['tag']}> field"
 
 
-def format_attribute(
-    key: str, value: Any, attribute: HtmlAttributeInfo, inner_multi: bool = False
-) -> str:
+def format_attribute(key: str, value: Any, attribute: HtmlAttributeInfo, inner_multi: bool = False) -> str:
     """
     Formats the attribute to add to the html attributes.
     Depending on the value and attribute config, this can add zero, one or more attributes
@@ -279,9 +265,7 @@ def format_attribute(
     if not inner_multi and attribute.multi_attribute:
         # For an aria dict, treat each value as
         formatted = [
-            format_attribute(
-                f"{html_attribute}-{sub_key}", sub_value, attribute, inner_multi=True
-            )
+            format_attribute(f"{html_attribute}-{sub_key}", sub_value, attribute, inner_multi=True)
             for sub_key, sub_value in value.items()
         ]
         # Don't add empty attributes

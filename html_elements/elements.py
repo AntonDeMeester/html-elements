@@ -10,9 +10,7 @@ AutoCapitalize = Literal["none", "off", "sentences", "on", "words", "characters"
 Dir = Literal["ltr", "rtl", "auto"]
 EnterKeyHint = Literal["enter", "done", "go", "next", "previous", "search", "send"]
 Hidden = bool | Literal["", "hidden", "until-found"]
-Inputmode = Literal[
-    "none", "text", "decimal", "numeric", "tel", "search", "email", "url"
-]
+Inputmode = Literal["none", "text", "decimal", "numeric", "tel", "search", "email", "url"]
 Translate = Literal["", "yes", "no"]
 VirtualKeyboardPolicy = Literal["", "auto", "manual"]
 
@@ -145,9 +143,7 @@ ShadowRootMode = Union[str, Literal["open", "closed"]]
 Spellcheck = Union[str, Literal["true", "default", "false"]]
 Wrap = Union[str, Literal["hard", "soft"]]
 ThScope = Union[str, Literal["row", "col", "rowgroup", "colgroup"]]
-TrackType = Union[
-    str, Literal["subtitles", "captions", "descriptions", "chapters", "metadata"]
-]
+TrackType = Union[str, Literal["subtitles", "captions", "descriptions", "chapters", "metadata"]]
 
 
 class EventHandlerAttributes(ABC, metaclass=HtmlMetaClass):
@@ -269,22 +265,16 @@ class BaseNoChildrenHtmlElement(
 
 
 class BaseChildrenHtmlElement(BaseNoChildrenHtmlElement, ABC):
-    children: list[Union[str, "BaseHtmlElement"]] = HtmlAttribute(
-        default_factory=list, kw_only=False, attribute_type="content"
-    )
+    children: list[Union[str, "BaseHtmlElement"]] = HtmlAttribute(default_factory=list, kw_only=False, attribute_type="content")
 
 
 class A(BaseChildrenHtmlElement, tag="a"):
     download: str | None = HtmlAttribute(default=None)
     href: str | None = HtmlAttribute(default=None)
     hreflang: str | None = HtmlAttribute(default=None)
-    ping: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    ping: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    ref: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    ref: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     target: Target = HtmlAttribute(default=None)
     type: str | None = HtmlAttribute(default=None)
 
@@ -302,9 +292,7 @@ class Area(BaseNoChildrenHtmlElement, tag="area", tag_omission=True):
     coords: str | None = HtmlAttribute(default=None)
     download: str | None = HtmlAttribute(default=None)
     href: str | None = HtmlAttribute(default=None)
-    ping: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    ping: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
     rel: str | None = HtmlAttribute(default=None)
     shape: Shape = HtmlAttribute(default=None)
@@ -324,9 +312,7 @@ class Aside(BaseChildrenHtmlElement, tag="aside"):
 class Audio(BaseChildrenHtmlElement, tag="audio"):
     autoplay: bool | None = HtmlAttribute(default=None)
     controls: bool | None = HtmlAttribute(default=None)
-    controlslist: list[ControlsList] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    controlslist: list[ControlsList] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
     disableremoteplayback: bool | None = HtmlAttribute(default=None)
     loop: bool | None = HtmlAttribute(default=None)
@@ -486,9 +472,7 @@ class Footer(BaseChildrenHtmlElement, tag="footer"):
 
 
 class Form(BaseChildrenHtmlElement, tag="form"):
-    accept_charset: str | None = HtmlAttribute(
-        default=None, html_attribute="accept-charset"
-    )
+    accept_charset: str | None = HtmlAttribute(default=None, html_attribute="accept-charset")
     autocomplete: AutoComplete = HtmlAttribute(default=None)
     name: str | None = HtmlAttribute(default=None)
     rel: str | None = HtmlAttribute(default=None)
@@ -543,9 +527,7 @@ class Hr(BaseNoChildrenHtmlElement, tag="hr", tag_omission=True):
 class Html(BaseChildrenHtmlElement, tag="html"):
     xmlms: str | None = HtmlAttribute(default=None)
 
-    def to_html(
-        self, indent: int = 0, indent_step: int = 2, format: bool = True
-    ) -> str:
+    def to_html(self, indent: int = 0, indent_step: int = 2, format: bool = True) -> str:
         html = super().to_html(indent=indent, indent_step=indent_step, format=format)
         newline = "\n" if format else ""
         return f"<!DOCTYPE html>{newline}{html}"
@@ -562,9 +544,7 @@ class Iframe(BaseNoChildrenHtmlElement, tag="iframe"):
     loading: Loading = HtmlAttribute(default=None)
     name: str | None = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    sandbox: list[Sandbox] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    sandbox: list[Sandbox] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     src: str | None = HtmlAttribute(default=None)
     srcdoc: str | None = HtmlAttribute(default=None)
     width: str | None = HtmlAttribute(default=None)
@@ -580,13 +560,9 @@ class Img(BaseChildrenHtmlElement, tag="img"):
     ismap: bool | None = HtmlAttribute(default=None)
     loading: Loading = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy = HtmlAttribute(default=None)
-    sizes: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
+    sizes: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
     src: str | None = HtmlAttribute(default=None)
-    srcset: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
+    srcset: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
     width: str | None = HtmlAttribute(default=None)
     usemap: str | None = HtmlAttribute(default=None)
 
@@ -657,21 +633,13 @@ class Link(BaseNoChildrenHtmlElement, tag="link", tag_omission=True):
     fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
     href: str | None = HtmlAttribute(default=None)
     hreflang: str | None = HtmlAttribute(default=None)
-    imagesizes: list[str] | None = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
-    imagesrcset: list[str] | None = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
+    imagesizes: list[str] | None = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    imagesrcset: list[str] | None = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
     integrity: str | None = HtmlAttribute(default=None)
     media: str | None = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    rel: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
-    sizes: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    rel: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    sizes: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     type: str | None = HtmlAttribute(default=None)
 
 
@@ -744,9 +712,7 @@ class Option(BaseChildrenHtmlElement, tag="option"):
 
 
 class Output(BaseChildrenHtmlElement, tag="output"):
-    for_: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x), html_attribute="for"
-    )
+    for_: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x), html_attribute="for")
     form: str | None = HtmlAttribute(default=None)
     name: str | None = HtmlAttribute(default=None)
 
@@ -799,9 +765,7 @@ class Samp(BaseChildrenHtmlElement, tag="samp"):
 
 class Script(BaseChildrenHtmlElement, tag="script"):
     async_: bool | None = HtmlAttribute(default=None, html_attribute="async")
-    blocking: list[Blocking] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    blocking: list[Blocking] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
     defer: bool | None = HtmlAttribute(default=None)
     fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
@@ -841,12 +805,8 @@ class Small(BaseChildrenHtmlElement, tag="small"):
 class Source(BaseNoChildrenHtmlElement, tag="source", tag_omission=True):
     type: str | None = HtmlAttribute(default=None)
     src: str | None = HtmlAttribute(default=None)
-    srcset: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
-    sizes: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: ", ".join(x)
-    )
+    srcset: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    sizes: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
     media: str | None = HtmlAttribute(default=None)
     height: str | None = HtmlAttribute(default=None)
     width: str | None = HtmlAttribute(default=None)
@@ -887,9 +847,7 @@ class Tbody(BaseChildrenHtmlElement, tag="tbody", tag_omission=True):
 
 class Td(BaseChildrenHtmlElement, tag="td", tag_omission=True):
     colspan: int | None = HtmlAttribute(default=None)
-    headers: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    headers: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     rowspan: int | None = HtmlAttribute(default=None)
 
 
@@ -921,9 +879,7 @@ class Tfoot(BaseChildrenHtmlElement, tag="tfoot", tag_omission=True):
 class Th(BaseChildrenHtmlElement, tag="th", tag_omission=True):
     abbr: str | None = HtmlAttribute(default=None)
     colspan: int | None = HtmlAttribute(default=None)
-    headers: list[str] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    headers: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     rowspan: int | None = HtmlAttribute(default=None)
     scope: ThScope | None = HtmlAttribute(default=None)
 
@@ -967,9 +923,7 @@ class Var(BaseChildrenHtmlElement, tag="var"):
 class Video(BaseChildrenHtmlElement, tag="video"):
     autoplay: bool | None = HtmlAttribute(default=None)
     controls: str | None = HtmlAttribute(default=None)
-    controlslist: list[ControlsList] = HtmlAttribute(
-        default_factory=list, transformer=lambda x: " ".join(x)
-    )
+    controlslist: list[ControlsList] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
     disablepictureinpicture: bool | None = HtmlAttribute(default=None)
     disableremoteplayback: bool | None = HtmlAttribute(default=None)

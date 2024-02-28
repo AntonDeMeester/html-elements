@@ -374,10 +374,7 @@ def test_has_no_children(element_class: Type[BaseHtmlElement]):
     with pytest.raises(TypeError):
         element_class(["test"])
     assert "children" not in element_class.__html_attributes__
-    assert all(
-        attr.attribute_type == "attribute"
-        for attr in element_class.__html_attributes__.values()
-    )
+    assert all(attr.attribute_type == "attribute" for attr in element_class.__html_attributes__.values())
 
 
 @pytest.mark.parametrize("element_class", WITH_CHILDREN_ELEMENTS)
@@ -385,9 +382,7 @@ def test_has_children(element_class: Type[e.BaseChildrenHtmlElement]):
     c = element_class(["test"])
     assert "children" in element_class.__html_attributes__
     assert all(
-        attr.attribute_type == "attribute"
-        for field, attr in element_class.__html_attributes__.items()
-        if field != "children"
+        attr.attribute_type == "attribute" for field, attr in element_class.__html_attributes__.items() if field != "children"
     )
     assert c.children == ["test"]
 
@@ -636,9 +631,7 @@ def test_tag_omission_no_children_attributes(element_class: Type[BaseHtmlElement
     assert a.to_html(format=False) == f"""<{_tag(a)} class="one" />"""
 
 
-@pytest.mark.parametrize(
-    "element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS
-)
+@pytest.mark.parametrize("element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS)
 def test_tag_omission_optional_children_none_present_no_attributes(
     element_class: Type[BaseHtmlElement],
 ):
@@ -646,9 +639,7 @@ def test_tag_omission_optional_children_none_present_no_attributes(
     assert a.to_html(format=False) == f"<{_tag(a)} />"
 
 
-@pytest.mark.parametrize(
-    "element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS
-)
+@pytest.mark.parametrize("element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS)
 def test_tag_omission_optional_children_none_present_attributes(
     element_class: Type[BaseHtmlElement],
 ):
@@ -656,9 +647,7 @@ def test_tag_omission_optional_children_none_present_attributes(
     assert a.to_html(format=False) == f"""<{_tag(a)} class="one" />"""
 
 
-@pytest.mark.parametrize(
-    "element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS
-)
+@pytest.mark.parametrize("element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS)
 def test_tag_omission_optional_children_some_present_no_attributes(
     element_class: Type[BaseHtmlElement],
 ):
@@ -666,9 +655,7 @@ def test_tag_omission_optional_children_some_present_no_attributes(
     assert a.to_html(format=False) == f"<{_tag(a)}>test</{_tag(a)}>"
 
 
-@pytest.mark.parametrize(
-    "element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS
-)
+@pytest.mark.parametrize("element_class", TAG_OMISSION_ELEMENTS & WITH_CHILDREN_ELEMENTS)
 def test_tag_omission_optional_children_some_present_attributes(
     element_class: Type[BaseHtmlElement],
 ):
@@ -706,10 +693,7 @@ def test_address():
 
 def test_article():
     c = e.Article(["test"], width="100px", height="100px")
-    assert (
-        c.to_html(format=False)
-        == '<article height="100px" width="100px">test</article>'
-    )
+    assert c.to_html(format=False) == '<article height="100px" width="100px">test</article>'
 
 
 def test_aside():
@@ -843,10 +827,7 @@ def test_dd():
 
 def test_del():
     c = e.Del(["test"], cite="Smart person", datetime="2023-01-01")
-    assert (
-        c.to_html(format=False)
-        == '<del cite="Smart person" datetime="2023-01-01">test</del>'
-    )
+    assert c.to_html(format=False) == '<del cite="Smart person" datetime="2023-01-01">test</del>'
 
 
 def test_details():
@@ -886,10 +867,7 @@ def test_em():
 
 def test_fieldset():
     c = e.Fieldset(["test"], disabled=True, form="form", name="name")
-    assert (
-        c.to_html(format=False)
-        == '<fieldset disabled form="form" name="name">test</fieldset>'
-    )
+    assert c.to_html(format=False) == '<fieldset disabled form="form" name="name">test</fieldset>'
 
 
 def test_figcaption():
@@ -1012,10 +990,7 @@ def test_img():
 
 def test_ins():
     c = e.Ins(["test"], cite="Smart person", datetime="2023-01-01")
-    assert (
-        c.to_html(format=False)
-        == '<ins cite="Smart person" datetime="2023-01-01">test</ins>'
-    )
+    assert c.to_html(format=False) == '<ins cite="Smart person" datetime="2023-01-01">test</ins>'
 
 
 def test_kbd():
@@ -1113,18 +1088,12 @@ def test_optgroup():
 
 def test_option():
     c = e.Option(["test"], disabled=True, label="label", selected=True, value="value")
-    assert (
-        c.to_html(format=False)
-        == '<option disabled label="label" selected value="value">test</option>'
-    )
+    assert c.to_html(format=False) == '<option disabled label="label" selected value="value">test</option>'
 
 
 def test_output():
     c = e.Output(["test"], for_=["for", "something"], form="form", name="name")
-    assert (
-        c.to_html(format=False)
-        == '<output for="for something" form="form" name="name">test</output>'
-    )
+    assert c.to_html(format=False) == '<output for="for something" form="form" name="name">test</output>'
 
 
 def test_p():
@@ -1139,10 +1108,7 @@ def test_picture():
 
 def test_portal():
     c = e.Portal(["test"], referrerpolicy="no-referrer", src="src")
-    assert (
-        c.to_html(format=False)
-        == '<portal referrerpolicy="no-referrer" src="src">test</portal>'
-    )
+    assert c.to_html(format=False) == '<portal referrerpolicy="no-referrer" src="src">test</portal>'
 
 
 def test_pre():
@@ -1152,9 +1118,7 @@ def test_pre():
 
 def test_progress():
     c = e.Progress(["test"], max=101.1, value=99.9)
-    assert (
-        c.to_html(format=False) == '<progress max="101.1" value="99.9">test</progress>'
-    )
+    assert c.to_html(format=False) == '<progress max="101.1" value="99.9">test</progress>'
 
 
 def test_q():
@@ -1256,9 +1220,7 @@ def test_strong():
 
 def test_style():
     c = e.Style(["test"], blocking="render", media="media")
-    assert (
-        c.to_html(format=False) == '<style blocking="render" media="media">test</style>'
-    )
+    assert c.to_html(format=False) == '<style blocking="render" media="media">test</style>'
 
 
 def test_sub():
@@ -1293,10 +1255,7 @@ def test_td():
         headers=["one", "two"],
         rowspan=4,
     )
-    assert (
-        c.to_html(format=False)
-        == '<td colspan="5" headers="one two" rowspan="4">test</td>'
-    )
+    assert c.to_html(format=False) == '<td colspan="5" headers="one two" rowspan="4">test</td>'
 
 
 def test_template():
@@ -1334,13 +1293,8 @@ def test_tfoot():
 
 
 def test_th():
-    c = e.Th(
-        ["test"], abbr="abbr", colspan=5, headers=["one", "two"], rowspan=5, scope="row"
-    )
-    assert (
-        c.to_html(format=False)
-        == '<th abbr="abbr" colspan="5" headers="one two" rowspan="5" scope="row">test</th>'
-    )
+    c = e.Th(["test"], abbr="abbr", colspan=5, headers=["one", "two"], rowspan=5, scope="row")
+    assert c.to_html(format=False) == '<th abbr="abbr" colspan="5" headers="one two" rowspan="5" scope="row">test</th>'
 
 
 def test_thead():
@@ -1424,10 +1378,7 @@ def test_col():
 
 def test_embed():
     c = e.Embed(height="height", src="src", type="type", width="width")
-    assert (
-        c.to_html(format=False)
-        == '<embed height="height" src="src" type="type" width="width" />'
-    )
+    assert c.to_html(format=False) == '<embed height="height" src="src" type="type" width="width" />'
 
 
 def test_hr():
@@ -1520,10 +1471,7 @@ def test_link():
 
 def test_meta():
     c = e.Meta(charset="charset", content="content", http_equiv="http", name="name")
-    assert (
-        c.to_html(format=False)
-        == '<meta charset="charset" content="content" http-equiv="http" name="name" />'
-    )
+    assert c.to_html(format=False) == '<meta charset="charset" content="content" http-equiv="http" name="name" />'
 
 
 def test_source():
@@ -1543,13 +1491,8 @@ def test_source():
 
 
 def test_track():
-    c = e.Track(
-        default=True, kind="subtitles", label="label", src="src", srclang="srclang"
-    )
-    assert (
-        c.to_html(format=False)
-        == '<track default kind="subtitles" label="label" src="src" srclang="srclang" />'
-    )
+    c = e.Track(default=True, kind="subtitles", label="label", src="src", srclang="srclang")
+    assert c.to_html(format=False) == '<track default kind="subtitles" label="label" src="src" srclang="srclang" />'
 
 
 def test_wbr():
