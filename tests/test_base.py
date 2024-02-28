@@ -240,13 +240,12 @@ def test_init_random_missing_other_fields():
     b = InitTest("one", kw="hello")  # type: ignore
     assert not hasattr(b, "other")
 
+
 def test_init_provide_arg_as_kwarg():
     with pytest.raises(TypeError) as e:
         InitTest("one", non_kw="two")  # type: ignore
-        assert (
-            e.value.args[0]
-            == "Got multiple values for argument 'non_kw'"
-        )
+        assert e.value.args[0] == "Got multiple values for argument 'non_kw'"
+
 
 def test_to_html_empty():
     c = ToHtmlComponent()
@@ -585,6 +584,8 @@ def test_to_html_tag_omission_children_optional_children():
 def test_to_html_tag_omission_children_attribute_children():
     c = TagOmissionWithChildren(children="Hello", field="test")
     assert c.to_html(format=False) == '<omis-c field="test">Hello</omis-c>'
+
+
 def test_repr():
     c = ToHtmlComponent()
     assert repr(c) == "<to-html> field"
