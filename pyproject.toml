@@ -4,6 +4,8 @@ version = "0.0.1"
 description = "HTML element objects to use in pure Python server side rendering"
 authors = ["Anton De Meester <antondemeester@gmail.com>"]
 readme = "README.md"
+packages = [{include = "html_elements"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.8"
