@@ -40,7 +40,7 @@ def test_html_attribute_info_values():
     assert attr.transformer is not None
     assert attr.transformer("test") == "testbla"
     assert attr.multi_attribute is True
-    assert attr.attribute_type == "child"
+    assert attr.attribute_type == "content"
     assert attr.init is False
     assert attr.default is None
     assert attr.default_factory is None
