@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Literal, Union
+from typing import Any, Dict, List, Literal, Union
 
 from .base import BaseHtmlElement, HtmlAttribute, HtmlMetaClass
 
@@ -9,7 +9,7 @@ ContentEditable = Union[TrueFalse, Literal["plaintext-only"]]
 AutoCapitalize = Literal["none", "off", "sentences", "on", "words", "characters"]
 Dir = Literal["ltr", "rtl", "auto"]
 EnterKeyHint = Literal["enter", "done", "go", "next", "previous", "search", "send"]
-Hidden = bool | Literal["", "hidden", "until-found"]
+Hidden = Union[bool, Literal["", "hidden", "until-found"]]
 Inputmode = Literal["none", "text", "decimal", "numeric", "tel", "search", "email", "url"]
 Translate = Literal["", "yes", "no"]
 VirtualKeyboardPolicy = Literal["", "auto", "manual"]
@@ -147,112 +147,112 @@ TrackType = Union[str, Literal["subtitles", "captions", "descriptions", "chapter
 
 
 class EventHandlerAttributes(ABC, metaclass=HtmlMetaClass):
-    onautocomplete: str | None = HtmlAttribute(default=None)
-    onabort: str | None = HtmlAttribute(default=None)
-    onautocompleteerror: str | None = HtmlAttribute(default=None)
-    onblur: str | None = HtmlAttribute(default=None)
-    oncancel: str | None = HtmlAttribute(default=None)
-    oncanplay: str | None = HtmlAttribute(default=None)
-    oncanplaythrough: str | None = HtmlAttribute(default=None)
-    onchange: str | None = HtmlAttribute(default=None)
-    onclick: str | None = HtmlAttribute(default=None)
-    onclose: str | None = HtmlAttribute(default=None)
-    oncontextmenu: str | None = HtmlAttribute(default=None)
-    oncuechange: str | None = HtmlAttribute(default=None)
-    ondblclick: str | None = HtmlAttribute(default=None)
-    ondrag: str | None = HtmlAttribute(default=None)
-    ondragend: str | None = HtmlAttribute(default=None)
-    ondragenter: str | None = HtmlAttribute(default=None)
-    ondragleave: str | None = HtmlAttribute(default=None)
-    ondragover: str | None = HtmlAttribute(default=None)
-    ondragstart: str | None = HtmlAttribute(default=None)
-    ondrop: str | None = HtmlAttribute(default=None)
-    ondurationchange: str | None = HtmlAttribute(default=None)
-    onemptied: str | None = HtmlAttribute(default=None)
-    onended: str | None = HtmlAttribute(default=None)
-    onerror: str | None = HtmlAttribute(default=None)
-    onfocus: str | None = HtmlAttribute(default=None)
-    oninput: str | None = HtmlAttribute(default=None)
-    oninvalid: str | None = HtmlAttribute(default=None)
-    onkeydown: str | None = HtmlAttribute(default=None)
-    onkeypress: str | None = HtmlAttribute(default=None)
-    onkeyup: str | None = HtmlAttribute(default=None)
-    onload: str | None = HtmlAttribute(default=None)
-    onloadeddata: str | None = HtmlAttribute(default=None)
-    onloadedmetadata: str | None = HtmlAttribute(default=None)
-    onloadstart: str | None = HtmlAttribute(default=None)
-    onmousedown: str | None = HtmlAttribute(default=None)
-    onmouseenter: str | None = HtmlAttribute(default=None)
-    onmouseleave: str | None = HtmlAttribute(default=None)
-    onmousemove: str | None = HtmlAttribute(default=None)
-    onmouseout: str | None = HtmlAttribute(default=None)
-    onmouseover: str | None = HtmlAttribute(default=None)
-    onmouseup: str | None = HtmlAttribute(default=None)
-    onmousewheel: str | None = HtmlAttribute(default=None)
-    onpause: str | None = HtmlAttribute(default=None)
-    onplay: str | None = HtmlAttribute(default=None)
-    onplaying: str | None = HtmlAttribute(default=None)
-    onprogress: str | None = HtmlAttribute(default=None)
-    onratechange: str | None = HtmlAttribute(default=None)
-    onreset: str | None = HtmlAttribute(default=None)
-    onresize: str | None = HtmlAttribute(default=None)
-    onscroll: str | None = HtmlAttribute(default=None)
-    onseeked: str | None = HtmlAttribute(default=None)
-    onseeking: str | None = HtmlAttribute(default=None)
-    onselect: str | None = HtmlAttribute(default=None)
-    onshow: str | None = HtmlAttribute(default=None)
-    onsort: str | None = HtmlAttribute(default=None)
-    onstalled: str | None = HtmlAttribute(default=None)
-    onsubmit: str | None = HtmlAttribute(default=None)
-    onsuspend: str | None = HtmlAttribute(default=None)
-    ontimeupdate: str | None = HtmlAttribute(default=None)
-    ontoggle: str | None = HtmlAttribute(default=None)
-    onvolumechange: str | None = HtmlAttribute(default=None)
-    onwaiting: str | None = HtmlAttribute(default=None)
+    onautocomplete: Union[str, None] = HtmlAttribute(default=None)
+    onabort: Union[str, None] = HtmlAttribute(default=None)
+    onautocompleteerror: Union[str, None] = HtmlAttribute(default=None)
+    onblur: Union[str, None] = HtmlAttribute(default=None)
+    oncancel: Union[str, None] = HtmlAttribute(default=None)
+    oncanplay: Union[str, None] = HtmlAttribute(default=None)
+    oncanplaythrough: Union[str, None] = HtmlAttribute(default=None)
+    onchange: Union[str, None] = HtmlAttribute(default=None)
+    onclick: Union[str, None] = HtmlAttribute(default=None)
+    onclose: Union[str, None] = HtmlAttribute(default=None)
+    oncontextmenu: Union[str, None] = HtmlAttribute(default=None)
+    oncuechange: Union[str, None] = HtmlAttribute(default=None)
+    ondblclick: Union[str, None] = HtmlAttribute(default=None)
+    ondrag: Union[str, None] = HtmlAttribute(default=None)
+    ondragend: Union[str, None] = HtmlAttribute(default=None)
+    ondragenter: Union[str, None] = HtmlAttribute(default=None)
+    ondragleave: Union[str, None] = HtmlAttribute(default=None)
+    ondragover: Union[str, None] = HtmlAttribute(default=None)
+    ondragstart: Union[str, None] = HtmlAttribute(default=None)
+    ondrop: Union[str, None] = HtmlAttribute(default=None)
+    ondurationchange: Union[str, None] = HtmlAttribute(default=None)
+    onemptied: Union[str, None] = HtmlAttribute(default=None)
+    onended: Union[str, None] = HtmlAttribute(default=None)
+    onerror: Union[str, None] = HtmlAttribute(default=None)
+    onfocus: Union[str, None] = HtmlAttribute(default=None)
+    oninput: Union[str, None] = HtmlAttribute(default=None)
+    oninvalid: Union[str, None] = HtmlAttribute(default=None)
+    onkeydown: Union[str, None] = HtmlAttribute(default=None)
+    onkeypress: Union[str, None] = HtmlAttribute(default=None)
+    onkeyup: Union[str, None] = HtmlAttribute(default=None)
+    onload: Union[str, None] = HtmlAttribute(default=None)
+    onloadeddata: Union[str, None] = HtmlAttribute(default=None)
+    onloadedmetadata: Union[str, None] = HtmlAttribute(default=None)
+    onloadstart: Union[str, None] = HtmlAttribute(default=None)
+    onmousedown: Union[str, None] = HtmlAttribute(default=None)
+    onmouseenter: Union[str, None] = HtmlAttribute(default=None)
+    onmouseleave: Union[str, None] = HtmlAttribute(default=None)
+    onmousemove: Union[str, None] = HtmlAttribute(default=None)
+    onmouseout: Union[str, None] = HtmlAttribute(default=None)
+    onmouseover: Union[str, None] = HtmlAttribute(default=None)
+    onmouseup: Union[str, None] = HtmlAttribute(default=None)
+    onmousewheel: Union[str, None] = HtmlAttribute(default=None)
+    onpause: Union[str, None] = HtmlAttribute(default=None)
+    onplay: Union[str, None] = HtmlAttribute(default=None)
+    onplaying: Union[str, None] = HtmlAttribute(default=None)
+    onprogress: Union[str, None] = HtmlAttribute(default=None)
+    onratechange: Union[str, None] = HtmlAttribute(default=None)
+    onreset: Union[str, None] = HtmlAttribute(default=None)
+    onresize: Union[str, None] = HtmlAttribute(default=None)
+    onscroll: Union[str, None] = HtmlAttribute(default=None)
+    onseeked: Union[str, None] = HtmlAttribute(default=None)
+    onseeking: Union[str, None] = HtmlAttribute(default=None)
+    onselect: Union[str, None] = HtmlAttribute(default=None)
+    onshow: Union[str, None] = HtmlAttribute(default=None)
+    onsort: Union[str, None] = HtmlAttribute(default=None)
+    onstalled: Union[str, None] = HtmlAttribute(default=None)
+    onsubmit: Union[str, None] = HtmlAttribute(default=None)
+    onsuspend: Union[str, None] = HtmlAttribute(default=None)
+    ontimeupdate: Union[str, None] = HtmlAttribute(default=None)
+    ontoggle: Union[str, None] = HtmlAttribute(default=None)
+    onvolumechange: Union[str, None] = HtmlAttribute(default=None)
+    onwaiting: Union[str, None] = HtmlAttribute(default=None)
 
 
 class GlobalHtmlAttributes(ABC, metaclass=HtmlMetaClass):
-    aria: dict[str, Any] = HtmlAttribute(default_factory=dict, multi_attribute=True)
-    accesskey: str | None = HtmlAttribute(default=None)
-    autocapitalize: AutoCapitalize | None = HtmlAttribute(default=None)
-    autofocus: bool | None = HtmlAttribute(default=None)
-    classes: list[str] = HtmlAttribute(
+    aria: Dict[str, Any] = HtmlAttribute(default_factory=dict, multi_attribute=True)
+    accesskey: Union[str, None] = HtmlAttribute(default=None)
+    autocapitalize: Union[AutoCapitalize, None] = HtmlAttribute(default=None)
+    autofocus: Union[bool, None] = HtmlAttribute(default=None)
+    classes: List[str] = HtmlAttribute(
         default_factory=list,
         html_attribute="class",
         transformer=lambda x: " ".join(x),
     )
-    contenteditable: ContentEditable | None = HtmlAttribute(default=None)
-    contextmenu: str | None = HtmlAttribute(default=None)
-    data: dict[str, Any] = HtmlAttribute(default=None, multi_attribute=True)
-    dir: Dir | None = HtmlAttribute(default=None)
-    draggable: TrueFalse | None = HtmlAttribute(default=None)
-    enterkeyhint: EnterKeyHint | None = HtmlAttribute(default=None)
-    exportparts: str | None = HtmlAttribute(default=None)
-    hidden: Hidden | None = HtmlAttribute(default=None)
-    id: str | None = HtmlAttribute(default=None)
-    inert: bool | None = HtmlAttribute(default=None)
+    contenteditable: Union[ContentEditable, None] = HtmlAttribute(default=None)
+    contextmenu: Union[str, None] = HtmlAttribute(default=None)
+    data: Dict[str, Any] = HtmlAttribute(default=None, multi_attribute=True)
+    dir: Union[Dir, None] = HtmlAttribute(default=None)
+    draggable: Union[TrueFalse, None] = HtmlAttribute(default=None)
+    enterkeyhint: Union[EnterKeyHint, None] = HtmlAttribute(default=None)
+    exportparts: Union[str, None] = HtmlAttribute(default=None)
+    hidden: Union[Hidden, None] = HtmlAttribute(default=None)
+    id: Union[str, None] = HtmlAttribute(default=None)
+    inert: Union[bool, None] = HtmlAttribute(default=None)
     inputmode: Inputmode = HtmlAttribute(default=None)
-    is_: str | None = HtmlAttribute(default=None, html_attribute="is")
-    itemid: str | None = HtmlAttribute(default=None)
-    itemprop: str | None = HtmlAttribute(default=None)
-    itemref: str | None = HtmlAttribute(default=None)
-    itemscope: bool | None = HtmlAttribute(default=None)
-    itemtype: str | None = HtmlAttribute(default=None)
-    lang: str | None = HtmlAttribute(default=None)
-    nonce: str | None = HtmlAttribute(default=None)
-    part: str | None = HtmlAttribute(default=None)
-    popover: str | None = HtmlAttribute(default=None)
-    role: str | None = HtmlAttribute(default=None)
-    slot: str | None = HtmlAttribute(default=None)
+    is_: Union[str, None] = HtmlAttribute(default=None, html_attribute="is")
+    itemid: Union[str, None] = HtmlAttribute(default=None)
+    itemprop: Union[str, None] = HtmlAttribute(default=None)
+    itemref: Union[str, None] = HtmlAttribute(default=None)
+    itemscope: Union[bool, None] = HtmlAttribute(default=None)
+    itemtype: Union[str, None] = HtmlAttribute(default=None)
+    lang: Union[str, None] = HtmlAttribute(default=None)
+    nonce: Union[str, None] = HtmlAttribute(default=None)
+    part: Union[str, None] = HtmlAttribute(default=None)
+    popover: Union[str, None] = HtmlAttribute(default=None)
+    role: Union[str, None] = HtmlAttribute(default=None)
+    slot: Union[str, None] = HtmlAttribute(default=None)
     spellcheck: Spellcheck = HtmlAttribute(default=None)
-    style: dict[str, str] = HtmlAttribute(
+    style: Dict[str, str] = HtmlAttribute(
         default_factory=dict,
         transformer=lambda x: "; ".join(f"{key}: {value}" for key, value in x.items()),
     )
-    tabindex: int | None = HtmlAttribute(default=None)
-    title: str | None = HtmlAttribute(default=None)
-    translate: Translate | None = HtmlAttribute(default=None)
-    virtualkeyboardpolicy: VirtualKeyboardPolicy | None = HtmlAttribute(default=None)
+    tabindex: Union[int, None] = HtmlAttribute(default=None)
+    title: Union[str, None] = HtmlAttribute(default=None)
+    translate: Union[Translate, None] = HtmlAttribute(default=None)
+    virtualkeyboardpolicy: Union[VirtualKeyboardPolicy, None] = HtmlAttribute(default=None)
 
 
 class BaseNoChildrenHtmlElement(
@@ -265,18 +265,18 @@ class BaseNoChildrenHtmlElement(
 
 
 class BaseChildrenHtmlElement(BaseNoChildrenHtmlElement, ABC):
-    children: list[Union[str, "BaseHtmlElement"]] = HtmlAttribute(default_factory=list, kw_only=False, attribute_type="content")
+    children: List[Union[str, "BaseHtmlElement"]] = HtmlAttribute(default_factory=list, kw_only=False, attribute_type="content")
 
 
 class A(BaseChildrenHtmlElement, tag="a"):
-    download: str | None = HtmlAttribute(default=None)
-    href: str | None = HtmlAttribute(default=None)
-    hreflang: str | None = HtmlAttribute(default=None)
-    ping: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    ref: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    download: Union[str, None] = HtmlAttribute(default=None)
+    href: Union[str, None] = HtmlAttribute(default=None)
+    hreflang: Union[str, None] = HtmlAttribute(default=None)
+    ping: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    referrerpolicy: Union[ReferrerPolicy, None] = HtmlAttribute(default=None)
+    ref: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
     target: Target = HtmlAttribute(default=None)
-    type: str | None = HtmlAttribute(default=None)
+    type: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Abbr(BaseChildrenHtmlElement, tag="abbr"):
@@ -288,21 +288,21 @@ class Address(BaseChildrenHtmlElement, tag="address"):
 
 
 class Area(BaseNoChildrenHtmlElement, tag="area", tag_omission=True):
-    alt: str | None = HtmlAttribute(default=None)
-    coords: str | None = HtmlAttribute(default=None)
-    download: str | None = HtmlAttribute(default=None)
-    href: str | None = HtmlAttribute(default=None)
-    ping: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    rel: str | None = HtmlAttribute(default=None)
+    alt: Union[str, None] = HtmlAttribute(default=None)
+    coords: Union[str, None] = HtmlAttribute(default=None)
+    download: Union[str, None] = HtmlAttribute(default=None)
+    href: Union[str, None] = HtmlAttribute(default=None)
+    ping: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    referrerpolicy: Union[ReferrerPolicy, None] = HtmlAttribute(default=None)
+    rel: Union[str, None] = HtmlAttribute(default=None)
     shape: Shape = HtmlAttribute(default=None)
     target: Target = HtmlAttribute(default=None)
-    value: str | None = HtmlAttribute(default=None)
+    value: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Article(BaseChildrenHtmlElement, tag="article"):
-    height: str | None = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Aside(BaseChildrenHtmlElement, tag="aside"):
@@ -310,15 +310,15 @@ class Aside(BaseChildrenHtmlElement, tag="aside"):
 
 
 class Audio(BaseChildrenHtmlElement, tag="audio"):
-    autoplay: bool | None = HtmlAttribute(default=None)
-    controls: bool | None = HtmlAttribute(default=None)
-    controlslist: list[ControlsList] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
-    disableremoteplayback: bool | None = HtmlAttribute(default=None)
-    loop: bool | None = HtmlAttribute(default=None)
-    muted: bool | None = HtmlAttribute(default=None)
+    autoplay: Union[bool, None] = HtmlAttribute(default=None)
+    controls: Union[bool, None] = HtmlAttribute(default=None)
+    controlslist: List[ControlsList] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    crossorigin: Union[CrossOrigin, None] = HtmlAttribute(default=None)
+    disableremoteplayback: Union[bool, None] = HtmlAttribute(default=None)
+    loop: Union[bool, None] = HtmlAttribute(default=None)
+    muted: Union[bool, None] = HtmlAttribute(default=None)
     preload: Preload = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
 
 
 class B(BaseChildrenHtmlElement, tag="b"):
@@ -339,23 +339,23 @@ class Bdo(BaseChildrenHtmlElement, tag="bdo"):
 
 
 class Blockquote(BaseChildrenHtmlElement, tag="blockquote"):
-    cite: str | None = HtmlAttribute(default=None)
+    cite: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Body(BaseChildrenHtmlElement, tag="body"):
-    onafterprint: str | None = HtmlAttribute(default=None)
-    onbeforeprint: str | None = HtmlAttribute(default=None)
-    onbeforeunload: str | None = HtmlAttribute(default=None)
-    onhashchange: str | None = HtmlAttribute(default=None)
-    onlanguagechange: str | None = HtmlAttribute(default=None)
-    onmessage: str | None = HtmlAttribute(default=None)
-    onoffline: str | None = HtmlAttribute(default=None)
-    ononline: str | None = HtmlAttribute(default=None)
-    onpopstate: str | None = HtmlAttribute(default=None)
-    onredo: str | None = HtmlAttribute(default=None)
-    onstorage: str | None = HtmlAttribute(default=None)
-    onundo: str | None = HtmlAttribute(default=None)
-    onunload: str | None = HtmlAttribute(default=None)
+    onafterprint: Union[str, None] = HtmlAttribute(default=None)
+    onbeforeprint: Union[str, None] = HtmlAttribute(default=None)
+    onbeforeunload: Union[str, None] = HtmlAttribute(default=None)
+    onhashchange: Union[str, None] = HtmlAttribute(default=None)
+    onlanguagechange: Union[str, None] = HtmlAttribute(default=None)
+    onmessage: Union[str, None] = HtmlAttribute(default=None)
+    onoffline: Union[str, None] = HtmlAttribute(default=None)
+    ononline: Union[str, None] = HtmlAttribute(default=None)
+    onpopstate: Union[str, None] = HtmlAttribute(default=None)
+    onredo: Union[str, None] = HtmlAttribute(default=None)
+    onstorage: Union[str, None] = HtmlAttribute(default=None)
+    onundo: Union[str, None] = HtmlAttribute(default=None)
+    onunload: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Br(BaseNoChildrenHtmlElement, tag="br", tag_omission=True):
@@ -363,17 +363,17 @@ class Br(BaseNoChildrenHtmlElement, tag="br", tag_omission=True):
 
 
 class Button(BaseChildrenHtmlElement, tag="button"):
-    autofocus: bool | None = HtmlAttribute(default=None)
-    disable: bool | None = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
-    formaction: str | None = HtmlAttribute(default=None)
-    formenctype: str | None = HtmlAttribute(default=None)
-    formmethod: str | None = HtmlAttribute(default=None)
-    formnovalidate: bool | None = HtmlAttribute(default=None)
-    formtarget: Target | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    popovertarget: str | None = HtmlAttribute(default=None)
-    popovertargetaction: str | None = HtmlAttribute(default=None)
+    autofocus: Union[bool, None] = HtmlAttribute(default=None)
+    disable: Union[bool, None] = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
+    formaction: Union[str, None] = HtmlAttribute(default=None)
+    formenctype: Union[str, None] = HtmlAttribute(default=None)
+    formmethod: Union[str, None] = HtmlAttribute(default=None)
+    formnovalidate: Union[bool, None] = HtmlAttribute(default=None)
+    formtarget: Union[Target, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    popovertarget: Union[str, None] = HtmlAttribute(default=None)
+    popovertargetaction: Union[str, None] = HtmlAttribute(default=None)
     type: ButtonType = HtmlAttribute(default=None)
 
 
@@ -394,11 +394,11 @@ class Code(BaseChildrenHtmlElement, tag="code"):
 
 
 class Col(BaseNoChildrenHtmlElement, tag="col", tag_omission=True):
-    span: int | None = HtmlAttribute(default=None)
+    span: Union[int, None] = HtmlAttribute(default=None)
 
 
 class Colgroup(BaseChildrenHtmlElement, tag="colgroup", tag_omission=True):
-    span: int | None = HtmlAttribute(default=None)
+    span: Union[int, None] = HtmlAttribute(default=None)
 
 
 class Data(BaseChildrenHtmlElement, tag="data"):
@@ -414,12 +414,12 @@ class Dd(BaseChildrenHtmlElement, tag="dd", tag_omission=True):
 
 
 class Del(BaseChildrenHtmlElement, tag="del"):
-    cite: str | None = HtmlAttribute(default=None)
-    datetime: str | None = HtmlAttribute(default=None)
+    cite: Union[str, None] = HtmlAttribute(default=None)
+    datetime: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Details(BaseChildrenHtmlElement, tag="details"):
-    open: bool | None = HtmlAttribute(default=None)
+    open: Union[bool, None] = HtmlAttribute(default=None)
 
 
 class Dfn(BaseChildrenHtmlElement, tag="dfn"):
@@ -427,7 +427,7 @@ class Dfn(BaseChildrenHtmlElement, tag="dfn"):
 
 
 class Dialog(BaseChildrenHtmlElement, tag="dialog"):
-    open: bool | None = HtmlAttribute(default=None)
+    open: Union[bool, None] = HtmlAttribute(default=None)
 
 
 class Div(BaseChildrenHtmlElement, tag="div"):
@@ -447,16 +447,16 @@ class Em(BaseChildrenHtmlElement, tag="em"):
 
 
 class Embed(BaseNoChildrenHtmlElement, tag="embed", tag_omission=True):
-    height: str | None = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
-    type: str | None = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
+    type: Union[str, None] = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Fieldset(BaseChildrenHtmlElement, tag="fieldset"):
-    disabled: bool | None = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
+    disabled: Union[bool, None] = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Figcaption(BaseChildrenHtmlElement, tag="figcaption"):
@@ -472,16 +472,16 @@ class Footer(BaseChildrenHtmlElement, tag="footer"):
 
 
 class Form(BaseChildrenHtmlElement, tag="form"):
-    accept_charset: str | None = HtmlAttribute(default=None, html_attribute="accept-charset")
+    accept_charset: Union[str, None] = HtmlAttribute(default=None, html_attribute="accept-charset")
     autocomplete: AutoComplete = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    rel: str | None = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    rel: Union[str, None] = HtmlAttribute(default=None)
 
-    action: str | None = HtmlAttribute(default=None)
-    enctype: str | None = HtmlAttribute(default=None)
-    method: str | None = HtmlAttribute(default=None)
-    novalidate: bool | None = HtmlAttribute(default=None)
-    target: Target | None = HtmlAttribute(default=None)
+    action: Union[str, None] = HtmlAttribute(default=None)
+    enctype: Union[str, None] = HtmlAttribute(default=None)
+    method: Union[str, None] = HtmlAttribute(default=None)
+    novalidate: Union[bool, None] = HtmlAttribute(default=None)
+    target: Union[Target, None] = HtmlAttribute(default=None)
 
 
 class H1(BaseChildrenHtmlElement, tag="h1"):
@@ -525,7 +525,7 @@ class Hr(BaseNoChildrenHtmlElement, tag="hr", tag_omission=True):
 
 
 class Html(BaseChildrenHtmlElement, tag="html"):
-    xmlms: str | None = HtmlAttribute(default=None)
+    xmlms: Union[str, None] = HtmlAttribute(default=None)
 
     def to_html(self, indent: int = 0, indent_step: int = 2, format: bool = True) -> str:
         html = super().to_html(indent=indent, indent_step=indent_step, format=format)
@@ -538,77 +538,77 @@ class I(BaseChildrenHtmlElement, tag="i"):  # noqa: E742
 
 
 class Iframe(BaseNoChildrenHtmlElement, tag="iframe"):
-    allow: str | None = HtmlAttribute(default=None)
-    allowfullscreen: TrueFalse | None = HtmlAttribute(default=None)
-    height: str | None = HtmlAttribute(default=None)
+    allow: Union[str, None] = HtmlAttribute(default=None)
+    allowfullscreen: Union[TrueFalse, None] = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
     loading: Loading = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    sandbox: list[Sandbox] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    src: str | None = HtmlAttribute(default=None)
-    srcdoc: str | None = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    referrerpolicy: Union[ReferrerPolicy, None] = HtmlAttribute(default=None)
+    sandbox: List[Sandbox] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    src: Union[str, None] = HtmlAttribute(default=None)
+    srcdoc: Union[str, None] = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Img(BaseChildrenHtmlElement, tag="img"):
-    alt: str | None = HtmlAttribute(default=None)
-    crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
+    alt: Union[str, None] = HtmlAttribute(default=None)
+    crossorigin: Union[CrossOrigin, None] = HtmlAttribute(default=None)
     decoding: Decoding = HtmlAttribute(default=None)
-    elementtiming: str | None = HtmlAttribute(default=None)
-    fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
-    height: str | None = HtmlAttribute(default=None)
-    ismap: bool | None = HtmlAttribute(default=None)
+    elementtiming: Union[str, None] = HtmlAttribute(default=None)
+    fetchpriority: Union[FetchPriority, None] = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    ismap: Union[bool, None] = HtmlAttribute(default=None)
     loading: Loading = HtmlAttribute(default=None)
     referrerpolicy: ReferrerPolicy = HtmlAttribute(default=None)
-    sizes: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    src: str | None = HtmlAttribute(default=None)
-    srcset: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    width: str | None = HtmlAttribute(default=None)
-    usemap: str | None = HtmlAttribute(default=None)
+    sizes: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    src: Union[str, None] = HtmlAttribute(default=None)
+    srcset: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    width: Union[str, None] = HtmlAttribute(default=None)
+    usemap: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Input(BaseNoChildrenHtmlElement, tag="input", tag_omission=True):
-    accept: str | None = HtmlAttribute(default=None)
-    alt: str | None = HtmlAttribute(default=None)
-    autocomplete: AutoComplete | None = HtmlAttribute(default=None)
-    capture: str | None = HtmlAttribute(default=None)
-    checked: bool | None = HtmlAttribute(default=None)
-    dirname: str | None = HtmlAttribute(default=None)
-    disabled: bool | None = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
-    formaction: str | None = HtmlAttribute(default=None)
-    formenctype: str | None = HtmlAttribute(default=None)
-    formmethod: str | None = HtmlAttribute(default=None)
-    formnovalidate: str | None = HtmlAttribute(default=None)
+    accept: Union[str, None] = HtmlAttribute(default=None)
+    alt: Union[str, None] = HtmlAttribute(default=None)
+    autocomplete: Union[AutoComplete, None] = HtmlAttribute(default=None)
+    capture: Union[str, None] = HtmlAttribute(default=None)
+    checked: Union[bool, None] = HtmlAttribute(default=None)
+    dirname: Union[str, None] = HtmlAttribute(default=None)
+    disabled: Union[bool, None] = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
+    formaction: Union[str, None] = HtmlAttribute(default=None)
+    formenctype: Union[str, None] = HtmlAttribute(default=None)
+    formmethod: Union[str, None] = HtmlAttribute(default=None)
+    formnovalidate: Union[str, None] = HtmlAttribute(default=None)
     formtarget: Target = HtmlAttribute(default=None)
-    height: str | None = HtmlAttribute(default=None)
-    list: str | None = HtmlAttribute(default=None)
-    max: int | None = HtmlAttribute(default=None)
-    maxlength: int | None = HtmlAttribute(default=None)
-    min: int | None = HtmlAttribute(default=None)
-    minlength: int | None = HtmlAttribute(default=None)
-    multiple: bool | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    pattern: str | None = HtmlAttribute(default=None)
-    placeholder: str | None = HtmlAttribute(default=None)
-    popovertarget: str | None = HtmlAttribute(default=None)
-    popovertargetaction: PopoverTargetAction | None = HtmlAttribute(default=None)
-    readonly: bool | None = HtmlAttribute(default=None)
-    required: bool | None = HtmlAttribute(default=None)
-    size: int | None = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
-    step: int | None = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    list: Union[str, None] = HtmlAttribute(default=None)
+    max: Union[int, None] = HtmlAttribute(default=None)
+    maxlength: Union[int, None] = HtmlAttribute(default=None)
+    min: Union[int, None] = HtmlAttribute(default=None)
+    minlength: Union[int, None] = HtmlAttribute(default=None)
+    multiple: Union[bool, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    pattern: Union[str, None] = HtmlAttribute(default=None)
+    placeholder: Union[str, None] = HtmlAttribute(default=None)
+    popovertarget: Union[str, None] = HtmlAttribute(default=None)
+    popovertargetaction: Union[PopoverTargetAction, None] = HtmlAttribute(default=None)
+    readonly: Union[bool, None] = HtmlAttribute(default=None)
+    required: Union[bool, None] = HtmlAttribute(default=None)
+    size: Union[int, None] = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
+    step: Union[int, None] = HtmlAttribute(default=None)
     type: InputType = HtmlAttribute(default=None)
     value: Any = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 # TODO Create separate classes for each Input Type with the relevant attributes
 
 
 class Ins(BaseChildrenHtmlElement, tag="ins"):
-    cite: str | None = HtmlAttribute(default=None)
-    datetime: str | None = HtmlAttribute(default=None)
+    cite: Union[str, None] = HtmlAttribute(default=None)
+    datetime: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Kbd(BaseChildrenHtmlElement, tag="kbd"):
@@ -616,7 +616,7 @@ class Kbd(BaseChildrenHtmlElement, tag="kbd"):
 
 
 class Label(BaseChildrenHtmlElement, tag="label"):
-    for_: str | None = HtmlAttribute(default=None, html_attribute="for")
+    for_: Union[str, None] = HtmlAttribute(default=None, html_attribute="for")
 
 
 class Legend(BaseChildrenHtmlElement, tag="legend"):
@@ -624,23 +624,23 @@ class Legend(BaseChildrenHtmlElement, tag="legend"):
 
 
 class Li(BaseChildrenHtmlElement, tag="li", tag_omission=True):
-    value: int | None = HtmlAttribute(default=None)
+    value: Union[int, None] = HtmlAttribute(default=None)
 
 
 class Link(BaseNoChildrenHtmlElement, tag="link", tag_omission=True):
-    as_: str | None = HtmlAttribute(default=None, html_attribute="as")
-    crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
-    fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
-    href: str | None = HtmlAttribute(default=None)
-    hreflang: str | None = HtmlAttribute(default=None)
-    imagesizes: list[str] | None = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    imagesrcset: list[str] | None = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    integrity: str | None = HtmlAttribute(default=None)
-    media: str | None = HtmlAttribute(default=None)
-    referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    rel: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    sizes: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    type: str | None = HtmlAttribute(default=None)
+    as_: Union[str, None] = HtmlAttribute(default=None, html_attribute="as")
+    crossorigin: Union[CrossOrigin, None] = HtmlAttribute(default=None)
+    fetchpriority: Union[FetchPriority, None] = HtmlAttribute(default=None)
+    href: Union[str, None] = HtmlAttribute(default=None)
+    hreflang: Union[str, None] = HtmlAttribute(default=None)
+    imagesizes: Union[List[str], None] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    imagesrcset: Union[List[str], None] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    integrity: Union[str, None] = HtmlAttribute(default=None)
+    media: Union[str, None] = HtmlAttribute(default=None)
+    referrerpolicy: Union[ReferrerPolicy, None] = HtmlAttribute(default=None)
+    rel: Union[List[str], None] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    sizes: Union[List[str], None] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    type: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Main(BaseChildrenHtmlElement, tag="main"):
@@ -648,7 +648,7 @@ class Main(BaseChildrenHtmlElement, tag="main"):
 
 
 class Map(BaseChildrenHtmlElement, tag="map"):
-    name: str | None = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Mark(BaseChildrenHtmlElement, tag="mark"):
@@ -660,20 +660,20 @@ class Menu(BaseChildrenHtmlElement, tag="menu"):
 
 
 class Meta(BaseNoChildrenHtmlElement, tag="meta", tag_omission=True):
-    charset: str | None = HtmlAttribute(default=None)
-    content: str | None = HtmlAttribute(default=None)
-    http_equiv: str | None = HtmlAttribute(default=None, html_attribute="http-equiv")
-    name: str | None = HtmlAttribute(default=None)
+    charset: Union[str, None] = HtmlAttribute(default=None)
+    content: Union[str, None] = HtmlAttribute(default=None)
+    http_equiv: Union[str, None] = HtmlAttribute(default=None, html_attribute="http-equiv")
+    name: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Meter(BaseChildrenHtmlElement, tag="meter"):
     value: Any = HtmlAttribute(default=None)
-    min: float | None = HtmlAttribute(default=None)
-    max: float | None = HtmlAttribute(default=None)
-    low: float | None = HtmlAttribute(default=None)
-    high: float | None = HtmlAttribute(default=None)
-    optimum: float | None = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
+    min: Union[float, None] = HtmlAttribute(default=None)
+    max: Union[float, None] = HtmlAttribute(default=None)
+    low: Union[float, None] = HtmlAttribute(default=None)
+    high: Union[float, None] = HtmlAttribute(default=None)
+    optimum: Union[float, None] = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Nav(BaseChildrenHtmlElement, tag="nav"):
@@ -686,35 +686,35 @@ class Noscript(BaseChildrenHtmlElement, tag="noscript"):
 
 class Object(BaseChildrenHtmlElement, tag="object"):
     data: Any = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
-    height: str | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    type: str | None = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    type: Union[str, None] = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Ol(BaseChildrenHtmlElement, tag="ol"):
-    reversed: bool | None = HtmlAttribute(default=None)
-    start: int | None = HtmlAttribute(default=None)
+    reversed: Union[bool, None] = HtmlAttribute(default=None)
+    start: Union[int, None] = HtmlAttribute(default=None)
     type: ListType = HtmlAttribute(default=None)
 
 
 class Optgroup(BaseChildrenHtmlElement, tag="optgroup"):
-    disabled: bool | None = HtmlAttribute(default=None)
-    label: str | None = HtmlAttribute(default=None)
+    disabled: Union[bool, None] = HtmlAttribute(default=None)
+    label: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Option(BaseChildrenHtmlElement, tag="option"):
-    disabled: bool | None = HtmlAttribute(default=None)
-    label: str | None = HtmlAttribute(default=None)
-    selected: bool | None = HtmlAttribute(default=None)
+    disabled: Union[bool, None] = HtmlAttribute(default=None)
+    label: Union[str, None] = HtmlAttribute(default=None)
+    selected: Union[bool, None] = HtmlAttribute(default=None)
     value: Any = HtmlAttribute(default=None)
 
 
 class Output(BaseChildrenHtmlElement, tag="output"):
-    for_: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x), html_attribute="for")
-    form: str | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
+    for_: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x), html_attribute="for")
+    form: Union[str, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
 
 
 class P(BaseChildrenHtmlElement, tag="p"):
@@ -726,8 +726,8 @@ class Picture(BaseChildrenHtmlElement, tag="picture"):
 
 
 class Portal(BaseChildrenHtmlElement, tag="portal"):
-    referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
+    referrerpolicy: Union[ReferrerPolicy, None] = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Pre(BaseChildrenHtmlElement, tag="pre"):
@@ -735,12 +735,12 @@ class Pre(BaseChildrenHtmlElement, tag="pre"):
 
 
 class Progress(BaseChildrenHtmlElement, tag="progress"):
-    max: float | None = HtmlAttribute(default=None)
-    value: float | None = HtmlAttribute(default=None)
+    max: Union[float, None] = HtmlAttribute(default=None)
+    value: Union[float, None] = HtmlAttribute(default=None)
 
 
 class Q(BaseChildrenHtmlElement, tag="q"):
-    cite: str | None = HtmlAttribute(default=None)
+    cite: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Rp(BaseChildrenHtmlElement, tag="rp", tag_omission=True):
@@ -764,15 +764,15 @@ class Samp(BaseChildrenHtmlElement, tag="samp"):
 
 
 class Script(BaseChildrenHtmlElement, tag="script"):
-    async_: bool | None = HtmlAttribute(default=None, html_attribute="async")
-    blocking: list[Blocking] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
-    defer: bool | None = HtmlAttribute(default=None)
-    fetchpriority: FetchPriority | None = HtmlAttribute(default=None)
-    integrity: str | None = HtmlAttribute(default=None)
-    nomodule: bool | None = HtmlAttribute(default=None)
-    referrerpolicy: ReferrerPolicy | None = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
+    async_: Union[bool, None] = HtmlAttribute(default=None, html_attribute="async")
+    blocking: List[Blocking] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    crossorigin: Union[CrossOrigin, None] = HtmlAttribute(default=None)
+    defer: Union[bool, None] = HtmlAttribute(default=None)
+    fetchpriority: Union[FetchPriority, None] = HtmlAttribute(default=None)
+    integrity: Union[str, None] = HtmlAttribute(default=None)
+    nomodule: Union[bool, None] = HtmlAttribute(default=None)
+    referrerpolicy: Union[ReferrerPolicy, None] = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
     type: ScriptType = HtmlAttribute(default=None)
 
 
@@ -785,17 +785,17 @@ class Section(BaseChildrenHtmlElement, tag="section"):
 
 
 class Select(BaseChildrenHtmlElement, tag="select"):
-    autocomplete: AutoComplete | None = HtmlAttribute(default=None)
-    disabled: bool | None = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
-    multiple: bool | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    required: bool | None = HtmlAttribute(default=None)
-    size: int | None = HtmlAttribute(default=None)
+    autocomplete: Union[AutoComplete, None] = HtmlAttribute(default=None)
+    disabled: Union[bool, None] = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
+    multiple: Union[bool, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    required: Union[bool, None] = HtmlAttribute(default=None)
+    size: Union[int, None] = HtmlAttribute(default=None)
 
 
 class Slot(BaseChildrenHtmlElement, tag="slot"):
-    name: str | None = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Small(BaseChildrenHtmlElement, tag="small"):
@@ -803,13 +803,13 @@ class Small(BaseChildrenHtmlElement, tag="small"):
 
 
 class Source(BaseNoChildrenHtmlElement, tag="source", tag_omission=True):
-    type: str | None = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
-    srcset: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    sizes: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    media: str | None = HtmlAttribute(default=None)
-    height: str | None = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    type: Union[str, None] = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
+    srcset: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    sizes: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    media: Union[str, None] = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Span(BaseChildrenHtmlElement, tag="span"):
@@ -821,8 +821,8 @@ class Strong(BaseChildrenHtmlElement, tag="strong"):
 
 
 class Style(BaseChildrenHtmlElement, tag="style"):
-    blocking: Blocking | None = HtmlAttribute(default=None)
-    media: str | None = HtmlAttribute(default=None)
+    blocking: Union[Blocking, None] = HtmlAttribute(default=None)
+    media: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Sub(BaseChildrenHtmlElement, tag="sub"):
@@ -846,9 +846,9 @@ class Tbody(BaseChildrenHtmlElement, tag="tbody", tag_omission=True):
 
 
 class Td(BaseChildrenHtmlElement, tag="td", tag_omission=True):
-    colspan: int | None = HtmlAttribute(default=None)
-    headers: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    rowspan: int | None = HtmlAttribute(default=None)
+    colspan: Union[int, None] = HtmlAttribute(default=None)
+    headers: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    rowspan: Union[int, None] = HtmlAttribute(default=None)
 
 
 class Template(BaseChildrenHtmlElement, tag="template"):
@@ -856,20 +856,20 @@ class Template(BaseChildrenHtmlElement, tag="template"):
 
 
 class Textarea(BaseChildrenHtmlElement, tag="textarea"):
-    autocapitalize: AutoCapitalize | None = HtmlAttribute(default=None)
-    autocomplete: AutoComplete | None = HtmlAttribute(default=None)
-    cols: int | None = HtmlAttribute(default=None)
-    dirname: str | None = HtmlAttribute(default=None)
-    disabled: bool | None = HtmlAttribute(default=None)
-    form: str | None = HtmlAttribute(default=None)
-    maxlength: int | None = HtmlAttribute(default=None)
-    minlength: int | None = HtmlAttribute(default=None)
-    name: str | None = HtmlAttribute(default=None)
-    placeholder: str | None = HtmlAttribute(default=None)
-    readonly: bool | None = HtmlAttribute(default=None)
-    required: bool | None = HtmlAttribute(default=None)
-    rows: int | None = HtmlAttribute(default=None)
-    wrap: Wrap | None = HtmlAttribute(default=None)
+    autocapitalize: Union[AutoCapitalize, None] = HtmlAttribute(default=None)
+    autocomplete: Union[AutoComplete, None] = HtmlAttribute(default=None)
+    cols: Union[int, None] = HtmlAttribute(default=None)
+    dirname: Union[str, None] = HtmlAttribute(default=None)
+    disabled: Union[bool, None] = HtmlAttribute(default=None)
+    form: Union[str, None] = HtmlAttribute(default=None)
+    maxlength: Union[int, None] = HtmlAttribute(default=None)
+    minlength: Union[int, None] = HtmlAttribute(default=None)
+    name: Union[str, None] = HtmlAttribute(default=None)
+    placeholder: Union[str, None] = HtmlAttribute(default=None)
+    readonly: Union[bool, None] = HtmlAttribute(default=None)
+    required: Union[bool, None] = HtmlAttribute(default=None)
+    rows: Union[int, None] = HtmlAttribute(default=None)
+    wrap: Union[Wrap, None] = HtmlAttribute(default=None)
 
 
 class Tfoot(BaseChildrenHtmlElement, tag="tfoot", tag_omission=True):
@@ -877,11 +877,11 @@ class Tfoot(BaseChildrenHtmlElement, tag="tfoot", tag_omission=True):
 
 
 class Th(BaseChildrenHtmlElement, tag="th", tag_omission=True):
-    abbr: str | None = HtmlAttribute(default=None)
-    colspan: int | None = HtmlAttribute(default=None)
-    headers: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    rowspan: int | None = HtmlAttribute(default=None)
-    scope: ThScope | None = HtmlAttribute(default=None)
+    abbr: Union[str, None] = HtmlAttribute(default=None)
+    colspan: Union[int, None] = HtmlAttribute(default=None)
+    headers: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    rowspan: Union[int, None] = HtmlAttribute(default=None)
+    scope: Union[ThScope, None] = HtmlAttribute(default=None)
 
 
 class Thead(BaseChildrenHtmlElement, tag="thead", tag_omission=True):
@@ -889,7 +889,7 @@ class Thead(BaseChildrenHtmlElement, tag="thead", tag_omission=True):
 
 
 class Time(BaseChildrenHtmlElement, tag="time"):
-    datetime: str | None = HtmlAttribute(default=None)
+    datetime: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Title(BaseChildrenHtmlElement, tag="title"):
@@ -901,11 +901,11 @@ class Tr(BaseChildrenHtmlElement, tag="tr", tag_omission=True):
 
 
 class Track(BaseNoChildrenHtmlElement, tag="track", tag_omission=True):
-    default: bool | None = HtmlAttribute(default=None)
-    kind: TrackType | None = HtmlAttribute(default=None)
-    label: str | None = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
-    srclang: str | None = HtmlAttribute(default=None)
+    default: Union[bool, None] = HtmlAttribute(default=None)
+    kind: Union[TrackType, None] = HtmlAttribute(default=None)
+    label: Union[str, None] = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
+    srclang: Union[str, None] = HtmlAttribute(default=None)
 
 
 class U(BaseChildrenHtmlElement, tag="u"):
@@ -921,20 +921,20 @@ class Var(BaseChildrenHtmlElement, tag="var"):
 
 
 class Video(BaseChildrenHtmlElement, tag="video"):
-    autoplay: bool | None = HtmlAttribute(default=None)
-    controls: str | None = HtmlAttribute(default=None)
-    controlslist: list[ControlsList] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
-    crossorigin: CrossOrigin | None = HtmlAttribute(default=None)
-    disablepictureinpicture: bool | None = HtmlAttribute(default=None)
-    disableremoteplayback: bool | None = HtmlAttribute(default=None)
-    height: str | None = HtmlAttribute(default=None)
-    loop: bool | None = HtmlAttribute(default=None)
-    muted: bool | None = HtmlAttribute(default=None)
-    playsinline: bool | None = HtmlAttribute(default=None)
-    poster: str | None = HtmlAttribute(default=None)
+    autoplay: Union[bool, None] = HtmlAttribute(default=None)
+    controls: Union[str, None] = HtmlAttribute(default=None)
+    controlslist: List[ControlsList] = HtmlAttribute(default_factory=list, transformer=lambda x: " ".join(x))
+    crossorigin: Union[CrossOrigin, None] = HtmlAttribute(default=None)
+    disablepictureinpicture: Union[bool, None] = HtmlAttribute(default=None)
+    disableremoteplayback: Union[bool, None] = HtmlAttribute(default=None)
+    height: Union[str, None] = HtmlAttribute(default=None)
+    loop: Union[bool, None] = HtmlAttribute(default=None)
+    muted: Union[bool, None] = HtmlAttribute(default=None)
+    playsinline: Union[bool, None] = HtmlAttribute(default=None)
+    poster: Union[str, None] = HtmlAttribute(default=None)
     preload: Preload = HtmlAttribute(default=None)
-    src: str | None = HtmlAttribute(default=None)
-    width: str | None = HtmlAttribute(default=None)
+    src: Union[str, None] = HtmlAttribute(default=None)
+    width: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Wbr(BaseNoChildrenHtmlElement, tag="wbr", tag_omission=True):

@@ -1,33 +1,35 @@
 from abc import ABC
-from typing import Any
+from typing import Any, Dict, List, Union
 
 import pytest
 from html_elements.base import BaseHtmlElement, HtmlAttribute
 
 
 class AbstractElement(BaseHtmlElement, ABC):
-    string: str | None = HtmlAttribute(default=None)
-    integer: int | None = HtmlAttribute(default=None)
-    floating: float | None = HtmlAttribute(default=None)
-    boolean: bool | None = HtmlAttribute(default=None)
-    dictionary: dict[str, str] = HtmlAttribute(
+    string: Union[str, None] = HtmlAttribute(default=None)
+    integer: Union[int, None] = HtmlAttribute(default=None)
+    floating: Union[float, None] = HtmlAttribute(default=None)
+    boolean: Union[bool, None] = HtmlAttribute(default=None)
+    dictionary: Dict[str, str] = HtmlAttribute(
         default_factory=dict,
         transformer=lambda x: "; ".join(f"{k}={v}" for k, v in x.items()),
     )
-    array: list[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
-    multi_attribute: dict[str, Any] | None = HtmlAttribute(default_factory=dict, multi_attribute=True, html_attribute="multi")
-    multi_attribute_int: dict[str, int] | None = HtmlAttribute(
+    array: List[str] = HtmlAttribute(default_factory=list, transformer=lambda x: ", ".join(x))
+    multi_attribute: Union[Dict[str, Any], None] = HtmlAttribute(
+        default_factory=dict, multi_attribute=True, html_attribute="multi"
+    )
+    multi_attribute_int: Union[Dict[str, int], None] = HtmlAttribute(
         default_factory=dict,
         multi_attribute=True,
         html_attribute="multint",
         transformer=lambda x: f"{x * 10}",
     )
-    transformer: int | None = HtmlAttribute(default=None, transformer=lambda x: x * 10)
+    transformer: Union[int, None] = HtmlAttribute(default=None, transformer=lambda x: x * 10)
 
 
 class InitTest(BaseHtmlElement, tag="init"):
     non_kw: str = HtmlAttribute(kw_only=False)
-    non_kw_two: str | None = HtmlAttribute(default=None, kw_only=False)
+    non_kw_two: Union[str, None] = HtmlAttribute(default=None, kw_only=False)
     non_kw_three: str = HtmlAttribute(default_factory=lambda: "test", kw_only=False)
     kw: str = HtmlAttribute(kw_only=True)
     kw_two: str = HtmlAttribute(kw_only=True, default="two")
@@ -38,11 +40,11 @@ class InitTest(BaseHtmlElement, tag="init"):
 
 
 class SimpleToHtmlComponent(BaseHtmlElement, tag="easy"):
-    children: list[str | BaseHtmlElement] = HtmlAttribute(attribute_type="content", kw_only=False, default_factory=list)
+    children: List[Union[str, BaseHtmlElement]] = HtmlAttribute(attribute_type="content", kw_only=False, default_factory=list)
 
 
 class ToHtmlComponent(AbstractElement, tag="to-html"):
-    children: list[str | BaseHtmlElement] = HtmlAttribute(attribute_type="content", kw_only=False, default_factory=list)
+    children: List[Union[str, BaseHtmlElement]] = HtmlAttribute(attribute_type="content", kw_only=False, default_factory=list)
     children_two: str = HtmlAttribute(attribute_type="content", kw_only=False, default=None)
     children_three: float = HtmlAttribute(
         attribute_type="content",
@@ -87,7 +89,7 @@ def test_inheritance():
 
     class DerivedElement(AbstractElement, tag="derived"):
         new_field: str = HtmlAttribute(default=None)
-        string: str | None = HtmlAttribute(default="blabla", transformer=double, html_attribute="not-string")
+        string: Union[str, None] = HtmlAttribute(default="blabla", transformer=double, html_attribute="not-string")
 
     derived = DerivedElement(string="test", integer=5, dictionary={"this": "here"})
 

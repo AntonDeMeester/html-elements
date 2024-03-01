@@ -1,15 +1,16 @@
 from abc import ABC
+from typing import Union
 
 from html_elements.base import BaseHtmlElement, HtmlAttribute
 from html_elements.extensions import HtmxExtension, add_extension
 
 
 class Baseline(BaseHtmlElement, tag="base"):
-    field: str | None = HtmlAttribute(default=None)
+    field: Union[str, None] = HtmlAttribute(default=None)
 
 
 class Extension(BaseHtmlElement, ABC):
-    extra: str | None = HtmlAttribute(default=None)
+    extra: Union[str, None] = HtmlAttribute(default=None)
 
 
 def test_add_extension():

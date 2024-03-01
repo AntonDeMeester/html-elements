@@ -1,5 +1,5 @@
 from abc import ABC, ABCMeta
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Literal, TypedDict, Union
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Dict, List, Literal, Tuple, Type, TypedDict, Union
 
 from typing_extensions import dataclass_transform
 
@@ -11,15 +11,15 @@ class HtmlAttributeInfo:
     def __init__(
         self,
         *,
-        html_attribute: str | None = None,
-        transformer: Callable[[Any], str] | None = None,
+        html_attribute: Union[str, None] = None,
+        transformer: Union[Callable[[Any], str], None] = None,
         # For aria / dicts which needs their own attributes but are grouped together. Needs to be a dict
         multi_attribute: bool = False,
         attribute_type: HtmlAttributeType = "attribute",
         # Field specifiers https://typing.readthedocs.io/en/latest/spec/dataclasses.html#field-specifiers
         init: bool = True,
         default: Any = Undefined,
-        default_factory: Callable[[], Any] | None = None,
+        default_factory: Union[Callable[[], Any], None] = None,
         kw_only: bool = True,
     ):
         self.html_attribute = html_attribute
@@ -55,15 +55,15 @@ class HtmlAttributeInfo:
 
 def HtmlAttribute(
     *,
-    html_attribute: str | None = None,
-    transformer: Callable[[Any], str] | None = None,
+    html_attribute: Union[str, None] = None,
+    transformer: Union[Callable[[Any], str], None] = None,
     # For aria / dicts which needs their own attributes but are grouped together. Needs to be a dict
     multi_attribute: bool = False,
     attribute_type: HtmlAttributeType = "attribute",
     # Field specifiers https://typing.readthedocs.io/en/latest/spec/dataclasses.html#field-specifiers
     init: bool = True,
     default: Any = Undefined,
-    default_factory: Callable[[], Any] | None = None,
+    default_factory: Union[Callable[[], Any], None] = None,
     kw_only: bool = True,
 ) -> Any:
     """
@@ -93,11 +93,11 @@ class HtmlMetaClass(ABCMeta):
     def __new__(
         cls,
         cls_name: str,
-        bases: tuple[type[Any], ...],
-        namespace: dict[str, Any],
+        bases: Tuple[Type[Any], ...],
+        namespace: Dict[str, Any],
         **kwargs: Any,
     ) -> type:
-        attributes: dict[str, HtmlAttributeInfo] = {}
+        attributes: Dict[str, HtmlAttributeInfo] = {}
         config: HtmlElementConfig = {
             "tag_omission": False,
             "tag": "",
@@ -134,11 +134,11 @@ class HtmlElementConfig(TypedDict):
 
 
 class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
-    __html_subclasses__: ClassVar[list[type["BaseHtmlElement"]]] = []
+    __html_subclasses__: ClassVar[List[Type["BaseHtmlElement"]]] = []
 
     # Defined on Metaclass
     if TYPE_CHECKING:
-        __html_attributes__: ClassVar[dict[str, HtmlAttributeInfo]]
+        __html_attributes__: ClassVar[Dict[str, HtmlAttributeInfo]]
         __html_config__: ClassVar[HtmlElementConfig]
 
     def __init_subclass__(cls, *_args: Any, **_kwargs: Any):
@@ -172,7 +172,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
                 + ", ".join(non_kw_attributes_without_default[len(args) :])
             )
 
-        errors: list[str] = []
+        errors: List[str] = []
         for field, attribute in self.__html_attributes__.items():
             if field in kwargs:
                 setattr(self, field, kwargs.pop(field))
@@ -206,7 +206,7 @@ class BaseHtmlElement(ABC, metaclass=HtmlMetaClass):
             if new_attribute:
                 html_string += f" {new_attribute}"
 
-        content: list[tuple[Union[str, "BaseHtmlElement", Any], HtmlAttributeInfo]] = []
+        content: List[Tuple[Union[str, "BaseHtmlElement", Any], HtmlAttributeInfo]] = []
         for key, attribute in self.__html_attributes__.items():
             if attribute.attribute_type != "content":
                 continue

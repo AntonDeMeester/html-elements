@@ -1,10 +1,10 @@
-from typing import Type
+from typing import Set, Type, Union
 
 import pytest
 from html_elements import elements as e
 from html_elements.base import BaseHtmlElement
 
-ALL_ELEMENTS: set[Type[e.BaseHtmlElement]] = {
+ALL_ELEMENTS: Set[Type[e.BaseHtmlElement]] = {
     e.A,
     e.Abbr,
     e.Address,
@@ -119,7 +119,7 @@ ALL_ELEMENTS: set[Type[e.BaseHtmlElement]] = {
     e.Video,
     e.Wbr,
 }
-WITH_CHILDREN_ELEMENTS: set[Type[e.BaseChildrenHtmlElement]] = {
+WITH_CHILDREN_ELEMENTS: Set[Type[e.BaseChildrenHtmlElement]] = {
     e.A,
     e.Abbr,
     e.Address,
@@ -221,7 +221,7 @@ WITH_CHILDREN_ELEMENTS: set[Type[e.BaseChildrenHtmlElement]] = {
     e.Var,
     e.Video,
 }
-NO_CHILDREN_ELEMENTS: set[Type[e.BaseNoChildrenHtmlElement]] = {
+NO_CHILDREN_ELEMENTS: Set[Type[e.BaseNoChildrenHtmlElement]] = {
     e.Area,
     e.Base,
     e.Br,
@@ -236,7 +236,7 @@ NO_CHILDREN_ELEMENTS: set[Type[e.BaseNoChildrenHtmlElement]] = {
     e.Track,
     e.Wbr,
 }
-NO_TAG_OMISSION_ELEMENTS: set[Type[e.BaseHtmlElement]] = {
+NO_TAG_OMISSION_ELEMENTS: Set[Type[e.BaseHtmlElement]] = {
     e.A,
     e.Abbr,
     e.Address,
@@ -325,7 +325,7 @@ NO_TAG_OMISSION_ELEMENTS: set[Type[e.BaseHtmlElement]] = {
     e.Var,
     e.Video,
 }
-TAG_OMISSION_ELEMENTS: set[Type[e.BaseHtmlElement]] = {
+TAG_OMISSION_ELEMENTS: Set[Type[e.BaseHtmlElement]] = {
     e.Area,
     e.Base,
     e.Br,
@@ -355,7 +355,7 @@ TAG_OMISSION_ELEMENTS: set[Type[e.BaseHtmlElement]] = {
 }
 
 
-def _tag(el: Type[e.BaseHtmlElement] | e.BaseHtmlElement) -> str:
+def _tag(el: Union[Type[e.BaseHtmlElement], e.BaseHtmlElement]) -> str:
     return el.get_config_value("tag")
 
 
