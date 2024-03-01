@@ -20,6 +20,6 @@ jobs:
       - name: Dependencies
         run: poetry install --with dev
       - name: Lint
-        run: make lint
+        run: poetry run make lint
       - name: Test
-        run: make test
+        run: poetry run make test
