@@ -1,5 +1,6 @@
 from abc import ABC, ABCMeta
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Dict, List, Literal, Tuple, Type, TypedDict, Union
+from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Dict, List,
+                    Literal, Tuple, Type, TypedDict, Union)
 
 from typing_extensions import dataclass_transform
 
@@ -17,9 +18,9 @@ class HtmlAttributeInfo:
         multi_attribute: bool = False,
         attribute_type: HtmlAttributeType = "attribute",
         # Field specifiers https://typing.readthedocs.io/en/latest/spec/dataclasses.html#field-specifiers
-        init: bool = True,
         default: Any = Undefined,
         default_factory: Union[Callable[[], Any], None] = None,
+        init: bool = True,
         kw_only: bool = True,
     ):
         self.html_attribute = html_attribute
@@ -61,9 +62,9 @@ def HtmlAttribute(
     multi_attribute: bool = False,
     attribute_type: HtmlAttributeType = "attribute",
     # Field specifiers https://typing.readthedocs.io/en/latest/spec/dataclasses.html#field-specifiers
-    init: bool = True,
     default: Any = Undefined,
     default_factory: Union[Callable[[], Any], None] = None,
+    init: bool = True,
     kw_only: bool = True,
 ) -> Any:
     """

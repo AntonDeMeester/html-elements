@@ -10,3 +10,9 @@ lint:
 	ruff .
 	pyright .
 	mypy . --check-untyped-defs
+
+docs-build:
+	poetry run mkdocs build
+
+docs-run:
+	poetry run mkdocs serve

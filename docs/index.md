@@ -1,17 +1,49 @@
-# Welcome to MkDocs
+# HTML Elements
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+HTML Elements allows you to write HTML website while staying completely in Python. This will allow you to create SPA-like components, but keep your presentation layer in Python.
 
-## Commands
+Because it is in pure Python, it allows to use all the Python goodies such as functions, linting, type checking.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+To create this form (made with [Bulma](https://bulma.io/))
 
-## Project layout
+```html
+<form>
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="Name" name="name">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">email</label>
+        <div class="control">
+            <input class="input" type="emaiil" placeholder="Email" name="email">
+        </div>
+    </div>
+    <button class="button" type="submit">Submit</button>
+</form>
+```
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+You write
+
+```python
+from html_elements import elements as e
+
+def Input(type: str, label: str) -> e.BaseHtmlElement:
+    display = label.title()
+    return e.Div([
+        e.Label([display], classes=["label"]),
+        e.Div([
+            e.Input(classes=["input", type="type", placeholder=display, name=label]),
+            classes=["control"]
+        ])
+    ])
+
+html = e.Form([
+    Input("text", "name"),
+    Input("email", "email"),
+    e.Button("Submit", classes=["button"], type="submit")
+])
+
+print(html.to_html())
+```
