@@ -4,6 +4,10 @@ HTML Elements allows you to write HTML website while staying completely in Pytho
 
 Because it is in pure Python, it allows to use all the Python goodies such as functions, linting, type checking.
 
+Check out the reasoning behind the package in the [Background](background.md)
+
+## Example 
+
 To create this form (made with [Bulma](https://bulma.io/))
 
 ```html
