@@ -1,15 +1,17 @@
 format:
-	black .
-	ruff . --fix
+	poetry run black .
+	poetry run ruff . --fix
 
 test:
-	pytest --cov=html_elements --cov-report term-missing tests/
+	poetry run pytest --cov=html_elements --cov-report term-missing tests/
 
 lint:
-	black . --check
-	ruff .
-	pyright .
-	mypy . --check-untyped-defs
+	poetry run black . --check
+	poetry run ruff .
+	poetry run pyright .
+	poetry run mypy . --check-untyped-defs
+
+check: test lint
 
 docs-build:
 	poetry run mkdocs build

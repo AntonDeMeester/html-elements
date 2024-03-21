@@ -1,6 +1,5 @@
 from abc import ABC, ABCMeta
-from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Dict, List,
-                    Literal, Tuple, Type, TypedDict, Union)
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Dict, List, Literal, Tuple, Type, TypedDict, Union
 
 from typing_extensions import dataclass_transform
 
