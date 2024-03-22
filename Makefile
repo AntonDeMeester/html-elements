@@ -1,12 +1,12 @@
 format:
 	poetry run black .
-	poetry run ruff . --fix
+	poetry run ruff . --fix 
 
 test:
 	poetry run pytest --cov=html_elements --cov-report term-missing tests/
 
 lint:
-	poetry run black . --check
+	poetry run black . --check 
 	poetry run ruff .
 	poetry run pyright .
 	poetry run mypy . --check-untyped-defs

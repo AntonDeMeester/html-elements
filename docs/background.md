@@ -31,21 +31,7 @@ Or alternatively you can just remake them from an existing component library by 
 For example, making an Input element with label, using the excellent [Bulma framework](https://bulma.io).
 
 ```python
-from html_elements import elements as e
-
-def Input(type: str, label: str) -> e.BaseHtmlElement:
-    display = label.title()
-    return e.Div(
-        [
-            e.Label([display], classes=["label"]),
-            e.Div(
-                [
-                    e.Input(classes=["input"], type=type, placeholder=display, name=label),
-                ],
-                classes=["control"],
-            ),
-        ]
-    )
+--8<-- "docs_code/background/input.py":1:14
 ```
 
 It creates multiple HTML elements, but we only need to provide 2 input values. 
@@ -54,14 +40,7 @@ This means we can simplify our code quite a bit.
 Even if we make this a lot more complex, with the right defaults, we can still make it easy to implement with smart defaults. This way we can make the default easy, while making the complex possible.
 
 ```python
-def Input(type: str, name: str, label: str = "", placeholder: str = "", classes: list[str] = None) -> e.BaseHtmlElement:
-    if not label:
-        label = name.title()
-    if not placeholder:
-        placeholder = label
-    if not classes:
-        classes = ["control"]
-    ...
+--8<-- "docs_code/background/input.py":16:38
 ```
 
 ### Editor support and linting
@@ -75,33 +54,15 @@ VS code shows the following
 We can even use Python objects for inputs of our components, which can smartly take the information from it.
 
 ```python
-from typing import Any, List, Sequence
-from html_elements import elements as e
-
-def SimpleTable(data: Sequence[Any], columns: Sequence[str]) -> e.BaseHtmlElement:
-    rows: List[e.BaseHtmlElement] = []
-    for item in data:
-        cells: List[e.BaseHtmlElement | str] = []
-        for field in columns:
-            cells.append(e.Td([getattr(item, field, "")]))
-        rows.append(e.Tr(cells))
-    return e.Table([e.Thead([e.Tr([e.Th([heading]) for heading in columns])]), *rows], classes=["table"])
-
-data = [
-    {"id": "1", "name": "Bobby Greenfield", "email": "bobby@greenfield.com"},
-    {"id": "2", "name": "Johnny Smith", "email": "johhnySmith@gmail.com"},
-    {"id": "3", "name": "Faith Dogman", "email": "faith.dogman@hotmail.com"},
-    {"id": "4", "name": "Gregory House", "email": "greg.house@on.tv"},
-]
-table = SimpleTable(data, ["id", "name", "email"])
-table.to_html()
+--8<-- "docs_code/background/table.py":1:23
 ```
 
 If we would provide not a list or a sequence, it would provide an error.
 
 ```python
 # Continued from last one
-SimpleTable(object(), ["test"])
+
+--8<-- "docs_code/background/table.py":25:25
 ```
 
 It provides the following error in VS code

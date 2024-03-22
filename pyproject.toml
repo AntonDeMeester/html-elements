@@ -26,3 +26,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 128
+exclude = "docs_code|local"
+
+[tool.pyright]
+exclude = ["local", "site"]
+
+[tool.mypy]
+exclude = "site|local"

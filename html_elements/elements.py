@@ -112,29 +112,32 @@ Sandbox = Literal[
 Decoding = Literal["sync", "async", "auto"]
 FetchPriority = Literal["high", "low", "auto"]
 PopoverTargetAction = Literal["hide", "show", "toggle"]
-InputType = Literal[
-    "button",
-    "checkbox",
-    "color",
-    "date",
-    "datetime-local",
-    "email",
-    "file",
-    "hidden",
-    "image",
-    "month",
-    "number",
-    "password",
-    "radio",
-    "range",
-    "reset",
-    "search",
-    "submit",
-    "tel",
-    "text",
-    "time",
-    "url",
-    "week",
+InputType = Union[
+    Literal[
+        "button",
+        "checkbox",
+        "color",
+        "date",
+        "datetime-local",
+        "email",
+        "file",
+        "hidden",
+        "image",
+        "month",
+        "number",
+        "password",
+        "radio",
+        "range",
+        "reset",
+        "search",
+        "submit",
+        "tel",
+        "text",
+        "time",
+        "url",
+        "week",
+    ],
+    str,
 ]
 ListType = Literal["a", "A", "i", "I", "1"]
 Blocking = Union[str, Literal["render"]]
@@ -265,7 +268,7 @@ class BaseNoChildrenHtmlElement(
 
 
 class BaseChildrenHtmlElement(BaseNoChildrenHtmlElement, ABC):
-    children: List[Union[str, "BaseHtmlElement"]] = HtmlAttribute(default_factory=list, kw_only=False, attribute_type="content")
+    children: List[Union[str, BaseHtmlElement]] = HtmlAttribute(default_factory=list, kw_only=False, attribute_type="content")
 
 
 class A(BaseChildrenHtmlElement, tag="a"):

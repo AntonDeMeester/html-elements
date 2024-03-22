@@ -11,43 +11,11 @@ Check out the reasoning behind the package in the [Background](background.md)
 To create this form (made with [Bulma](https://bulma.io/))
 
 ```html
-<form>
-    <div class="field">
-        <label class="label">Name</label>
-        <div class="control">
-            <input class="input" type="text" placeholder="Name" name="name">
-        </div>
-    </div>
-    <div class="field">
-        <label class="label">email</label>
-        <div class="control">
-            <input class="input" type="emaiil" placeholder="Email" name="email">
-        </div>
-    </div>
-    <button class="button" type="submit">Submit</button>
-</form>
+--8<-- "docs_code/index/index.html"
 ```
 
 You write
 
 ```python
-from html_elements import elements as e
-
-def Input(type: str, label: str) -> e.BaseHtmlElement:
-    display = label.title()
-    return e.Div([
-        e.Label([display], classes=["label"]),
-        e.Div([
-            e.Input(classes=["input", type="type", placeholder=display, name=label]),
-            classes=["control"]
-        ])
-    ])
-
-html = e.Form([
-    Input("text", "name"),
-    Input("email", "email"),
-    e.Button("Submit", classes=["button"], type="submit")
-])
-
-print(html.to_html())
+--8<-- "docs_code/index/index.py"
 ```
