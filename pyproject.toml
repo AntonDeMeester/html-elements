@@ -1,11 +1,17 @@
 [tool.poetry]
 name = "html-elements"
-version = "0.1.1"
+version = "0.1.2"
 description = "HTML element objects to use in pure Python server side rendering"
 authors = ["Anton De Meester <antondemeester@gmail.com>"]
 readme = "README.md"
 packages = [{include = "html_elements"}]
+requires-python = ">=3.8"
+license = MIT
 
+[project.urls]
+Homepage = "https://github.com/AntonDeMeester/html-elements"
+Documentation = "https://antondemeester.github.io/html-elements/"
+Repository = "https://github.com/AntonDeMeester/html-elements"
 
 [tool.poetry.dependencies]
 python = "^3.8"
