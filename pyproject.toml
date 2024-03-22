@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "html-elements"
-version = "0.1.0"
+version = "0.1.1"
 description = "HTML element objects to use in pure Python server side rendering"
 authors = ["Anton De Meester <antondemeester@gmail.com>"]
 readme = "README.md"
