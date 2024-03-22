@@ -5,7 +5,6 @@ description = "HTML element objects to use in pure Python server side rendering"
 authors = ["Anton De Meester <antondemeester@gmail.com>"]
 readme = "README.md"
 packages = [{include = "html_elements"}]
-requires-python = ">=3.8"
 license = "MIT"
 
 [project.urls]
