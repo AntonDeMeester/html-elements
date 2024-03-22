@@ -6,7 +6,7 @@ authors = ["Anton De Meester <antondemeester@gmail.com>"]
 readme = "README.md"
 packages = [{include = "html_elements"}]
 requires-python = ">=3.8"
-license = MIT
+license = "MIT"
 
 [project.urls]
 Homepage = "https://github.com/AntonDeMeester/html-elements"
