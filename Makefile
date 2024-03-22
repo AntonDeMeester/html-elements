@@ -18,3 +18,7 @@ docs-build:
 
 docs-run:
 	poetry run mkdocs serve
+
+publish:
+	poetry build
+	poetry publish
